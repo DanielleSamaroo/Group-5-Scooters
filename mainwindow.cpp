@@ -213,7 +213,7 @@ void MainWindow::on_pushButton_2_clicked()
     buttonPosition();
 }
 
-
+// When "Create Account" button is clicked
 void MainWindow::on_pushButton_3_clicked()
 {
     // Go to Login window
@@ -230,11 +230,13 @@ void MainWindow::on_pushButton_3_clicked()
 
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q");
+    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
     mydb.open();
 
-    if (!mydb.open()) {
-        qDebug() << "DB not opened";
+    if (mydb.open())
+    {
+        qDebug() << "DB opened";
+
     }
 
     // Strings for sign up credentials
@@ -245,7 +247,7 @@ void MainWindow::on_pushButton_3_clicked()
     QSqlQuery query(mydb);
 
     // Insert data written to the database filters
-    query.prepare("INSERT INTO loginDetails (Username, Password) VALUES (:username, :password)");
+    query.prepare("INSERT INTO loginDetails (username, password) VALUES (:username, :password)");
     query.bindValue(":username", createUsername);
     query.bindValue(":password", createPassword);
 
@@ -255,47 +257,54 @@ void MainWindow::on_pushButton_3_clicked()
         // Print message when account is created
         ui->label_8->setText("Account created, enter your username and password");
         ui->label_8->show();
+
     }
+    query.finish();
 
     mydb.close();
 }
 
- // When "Next" button is pressed
+// When "Next" button is pressed
 void MainWindow::on_pushButton_4_clicked()
 {
 
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q");
+    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
     mydb.open();
+
+
+    // When the databse is opened
+    if(mydb.open())
+    {
+        qDebug() << "DB opened";
+    }
 
     // Strings for username and password
     QString username = ui->lineEdit->text();
     QString password = ui->lineEdit_2->text();
 
-    // When the databse is opened
-    if(mydb.open())
+    // Create a query
+    QSqlQuery query(mydb);
+
+    // Assign strings to database filters
+    query.prepare("SELECT * FROM loginDetails WHERE username = :username AND password = :password");
+    query.bindValue(":username", username);
+    query.bindValue(":password", password);
+
+    if(query.exec())
     {
-        // Create a query
-        QSqlQuery query(mydb);
-
-        // Assign strings to database filters
-        query.prepare("SELECT * FROM loginDetails WHERE Username = :username AND Password = :password");
-        query.bindValue(":username", username);
-        query.bindValue(":password", password);
-
-        if(query.exec())
+        if(query.next())
         {
-            if(query.next())
-            {
-                ui->label_8->hide();
-            }
-            else
-            {
-                // Show message for invalid credentials
-                ui->label_8->show();
-            }
+            ui->label_8->hide();
+        }
+        else
+        {
+            // Show message for invalid credentials
+            ui->label_8->show();
         }
     }
+    query.finish();
 }
+
 
