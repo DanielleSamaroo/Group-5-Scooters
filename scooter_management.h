@@ -14,10 +14,10 @@ public:
     ~scooter_management();
 
     // Method to add a new scooter to the database
-    void addScooter(const QString& availability, const QString& location, double pricing);
+    void addScooter(const QString& availability, const QString& location, double pricing, const QString& renter);
 
     // Method to update an existing scooter's details in the database
-    void updateScooter(int id, const QString& availability, const QString& location, double pricing);
+    void updateScooter(int id, const QString& availability, const QString& location, double pricing, const QString& renter);
 
     // Method to delete a scooter from the database
     void deleteScooter(int id);

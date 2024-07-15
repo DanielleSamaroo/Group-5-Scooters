@@ -4,7 +4,8 @@
 scooter_management::scooter_management() {
     // Initialize the SQLite database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("database_q.db"); // Set the database name
+    //db.setDatabaseName("database_q.db"); // Set the database name
+    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
 
     // Check if the database opens successfully
     if (!db.open()) {
@@ -12,13 +13,16 @@ scooter_management::scooter_management() {
         return;
     }
 
+
     // Create a SQL query to create the scooterDetails table if it doesn't exist
     QSqlQuery query;
     query.exec("CREATE TABLE IF NOT EXISTS scooterDetails ("
-               "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "Availability TEXT, "
-               "Location TEXT, "
-               "Pricing REAL)");
+               "scooter_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+               "available TEXT, "
+               "location TEXT, "
+               "rental_rate INTEGER, "
+               "renter TEXT)");
+
 }
 
 // Destructor implementation
@@ -27,13 +31,14 @@ scooter_management::~scooter_management() {
 }
 
 // Method to add a new scooter to the database
-void scooter_management::addScooter(const QString& availability, const QString& location, double pricing) {
+void scooter_management::addScooter(const QString& sAvailability, const QString& sLocation, double sPricing, const QString& sRenter) {
     // Prepare an SQL query to insert a new scooter record
     QSqlQuery query;
-    query.prepare("INSERT INTO scooterDetails (Availability, Location, Pricing) VALUES (:availability, :location, :pricing)");
-    query.bindValue(":availability", availability); // Bind the availability parameter
-    query.bindValue(":location", location); // Bind the location parameter
-    query.bindValue(":pricing", pricing); // Bind the pricing parameter
+    query.prepare("INSERT INTO scooterDetails (available, location, rental_rate, renter) VALUES (:availability, :location, :pricing, :renter)");
+    query.bindValue(":availability", sAvailability); // Bind the availability parameter
+    query.bindValue(":location", sLocation); // Bind the location parameter
+    query.bindValue(":pricing", sPricing); // Bind the pricing parameter
+    query.bindValue(":renter", sRenter); // Bind the renter parameter
 
     if (!query.exec()) {
         qDebug() << "Error adding scooter: " << query.lastError().text();
@@ -41,14 +46,15 @@ void scooter_management::addScooter(const QString& availability, const QString& 
 }
 
 // Method to update an existing scooter's details in the database
-void scooter_management::updateScooter(int id, const QString& availability, const QString& location, double pricing) {
+void scooter_management::updateScooter(int sID, const QString& sAvailability, const QString& sLocation, double sPricing, const QString& sRenter ) {
     // Prepare an SQL query to update a scooter record based on its ID
     QSqlQuery query;
-    query.prepare("UPDATE scooterDetails SET Availability = :availability, Location = :location, Pricing = :pricing WHERE ID = :id");
-    query.bindValue(":availability", availability); // Bind the availability parameter
-    query.bindValue(":location", location); // Bind the location parameter
-    query.bindValue(":pricing", pricing); // Bind the pricing parameter
-    query.bindValue(":id", id); // Bind the ID parameter
+    query.prepare("UPDATE scooterDetails SET available = :availability, location = :location, rental_rate = :pricing, renter = :renter WHERE scooter_id = :id");
+    query.bindValue(":availability", sAvailability); // Bind the availability parameter
+    query.bindValue(":location", sLocation); // Bind the location parameter
+    query.bindValue(":pricing", sPricing); // Bind the pricing parameter
+    query.bindValue(":id", sID); // Bind the ID parameter
+    query.bindValue(":renter", sRenter); // Bind the renter parameter
 
     if (!query.exec()) {
         qDebug() << "Error updating scooter: " << query.lastError().text();
@@ -56,11 +62,11 @@ void scooter_management::updateScooter(int id, const QString& availability, cons
 }
 
 // Method to delete a scooter from the database
-void scooter_management::deleteScooter(int id) {
+void scooter_management::deleteScooter(int sID) {
     // Prepare an SQL query to delete a scooter record based on its ID
     QSqlQuery query;
-    query.prepare("DELETE FROM scooterDetails WHERE ID = :id");
-    query.bindValue(":id", id); // Bind the ID parameter
+    query.prepare("DELETE FROM scooterDetails WHERE scooter_id = :id");
+    query.bindValue(":id", sID); // Bind the ID parameter
 
     if (!query.exec()) {
         qDebug() << "Error deleting scooter: " << query.lastError().text();
@@ -75,10 +81,11 @@ QList<QVariantMap> scooter_management::getAllScooters() {
     // Iterate over the result set
     while (query.next()) {
         QVariantMap scooter; // Create a map to hold the scooter details
-        scooter["ID"] = query.value("ID"); // Retrieve and store the ID value
-        scooter["Availability"] = query.value("Availability"); // Retrieve and store the availability value
-        scooter["Location"] = query.value("Location"); // Retrieve and store the location value
-        scooter["Pricing"] = query.value("Pricing"); // Retrieve and store the pricing value
+        scooter["scooter_id"] = query.value("scooter_id"); // Retrieve and store the ID value
+        scooter["available"] = query.value("available"); // Retrieve and store the availability value
+        scooter["location"] = query.value("location"); // Retrieve and store the location value
+        scooter["rental_rate"] = query.value("rental_rate"); // Retrieve and store the pricing value
+        scooter["renter"] = query.value("renter"); // Retrieve and store the renter value
         scooters.append(scooter); // Add the map to the list
     }
 
