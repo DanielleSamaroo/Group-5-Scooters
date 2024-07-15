@@ -218,8 +218,8 @@ void MainWindow::on_pushButton_3_clicked()
 {
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    //mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
     mydb.open();
 
     if (mydb.open())
@@ -289,8 +289,8 @@ void MainWindow::on_pushButton_4_clicked()
 
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    //mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
     mydb.open();
 
 
