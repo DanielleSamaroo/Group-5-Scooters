@@ -1,11 +1,20 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "scooter_management.h"
+#include <QPixmap>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+
+
     ui->setupUi(this);
+
+    this->resize(400,500);
+
+    QPixmap pix("/Users/juanpostiglione/Downloads/scooter.png");
+    ui->label_4->setPixmap(pix);
 
     // Set Window Color
     this->setStyleSheet("background-color: rgb(1, 68, 3);");
@@ -24,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit_6->hide();
 
     ui->label_8->hide();
+    ui->label_5->hide();
 
     // Hide "Next", "Back" and "Create Account" Button
     ui->pushButton_4->hide();
@@ -32,21 +42,31 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Set Button and Label Colors
     ui->label_3->setStyleSheet("QLabel { color : rgb(255, 165, 0); }");
-    ui->pushButton->setStyleSheet("QPushButton { background-color : grey; }");
-    ui->pushButton_2->setStyleSheet("QPushButton { background-color : grey; }");
-    ui->pushButton_3->setStyleSheet("QPushButton { background-color : grey; }");
-    ui->pushButton_4->setStyleSheet("QPushButton { background-color : grey; }");
-    ui->pushButton_5->setStyleSheet("QPushButton { background-color : grey; }");
+    ui->pushButton->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                  "}" "QPushButton:hover {" "background-color: orange;""}");
+
+    ui->pushButton_2->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                    "}" "QPushButton:hover {" "background-color: orange;""}");
+
+    ui->pushButton_3->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                    "}" "QPushButton:hover {" "background-color: orange;""}");
+
+    ui->pushButton_4->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                    "}" "QPushButton:hover {" "background-color: orange;""}");
+
+    ui->pushButton_5->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                    "}" "QPushButton:hover {" "background-color: orange;""}");
 
     // Initially set Button Position
     buttonPosition();
 
     // Edit Font
-    setFontAttributes(20, true, true);
+    setFontAttributes(30, true, true);
 
     // Initially set Label Position
     labelPosition();
 }
+
 
 void MainWindow::setFontAttributes(int size, bool bold, bool italic)
 {
@@ -70,11 +90,11 @@ void MainWindow::buttonPosition()
     int centerY = (windowHeight - pushButtonHeight) / 2;
 
     // Buttons Position
-    ui->pushButton->move(centerX  ,centerY + 100);
-    ui->pushButton_2->move(centerX + 135, centerY + 100);
-    ui->pushButton_4->move(centerX +380,centerY+300);
-    ui->pushButton_5->move(centerX -220,centerY+300);
-    ui->pushButton_3->move(centerX +370,centerY+300);
+    ui->pushButton->move(centerX -200,centerY + 100);
+    ui->pushButton_2->move(centerX -35, centerY + 100);
+    ui->pushButton_4->move(centerX -35,centerY+100);
+    ui->pushButton_5->move(centerX -200,centerY+100);
+    ui->pushButton_3->move(centerX -40,centerY+100);
 
 }
 
@@ -90,12 +110,14 @@ void MainWindow::labelPosition()
     int centerY = (windowHeight - labelHeight) / 2;
 
     // Labels Position
-    ui->label->move(centerX, centerY-98.5);
-    ui->label_2->move(centerX,centerY-48.5);
-    ui->label_3->move(centerX - 50,centerY-150);
-    ui->label_6->move(centerX-40,centerY - 98.5);
-    ui->label_7->move(centerX-40,centerY - 48.5);
-    ui->label_8->move(centerX, centerY + 2.5);
+    ui->label->move(centerX-180, centerY-98.5);
+    ui->label_2->move(centerX-180,centerY-48.5);
+    ui->label_3->move(centerX-195,centerY-150);
+    ui->label_4->move(centerX -125, centerY - 50);
+    ui->label_5->move(centerX-180, centerY +20);
+    ui->label_6->move(centerX-190,centerY - 98.5);
+    ui->label_7->move(centerX-190,centerY - 48.5);
+    ui->label_8->move(centerX-180, centerY + 2.5);
 }
 
 // Set the Line Text Position
@@ -110,10 +132,10 @@ void MainWindow::lineTextPosition()
     int centerY = (windowWidth - lineTextWidth) /2;
 
     // Line Text Position
-    ui->lineEdit->move(centerX + 140 ,centerY - 130);
-    ui->lineEdit_2->move(centerX + 140,centerY - 80);
-    ui->lineEdit_5->move(centerX+140,centerY-130);
-    ui->lineEdit_6->move(centerX+140,centerY - 80);
+    ui->lineEdit->move(centerX -50 ,centerY - 130);
+    ui->lineEdit_2->move(centerX -50,centerY - 80);
+    ui->lineEdit_5->move(centerX-20,centerY-130);
+    ui->lineEdit_6->move(centerX-20,centerY - 80);
 }
 
 
@@ -129,6 +151,7 @@ void MainWindow::on_pushButton_clicked()
     ui->pushButton->hide();
     ui->pushButton_2->hide();
     ui->label_3->hide();
+    ui->label_4->hide();
 
     // Label Names
     ui->label->setText("Username:");
@@ -164,6 +187,7 @@ void MainWindow::on_pushButton_5_clicked()
     ui->pushButton->show();
     ui->pushButton_2->show();
     ui->label_3->show();
+    ui->label_4->show();
 
     // Hide other labels and edit lines
     ui->lineEdit->hide();
@@ -175,6 +199,7 @@ void MainWindow::on_pushButton_5_clicked()
     ui->label_7->hide();
     ui->lineEdit_6->hide();
     ui->label_8->hide();
+    ui->label_5->hide();
 
     // Hide buttons
     ui->pushButton_3->hide();
@@ -182,6 +207,7 @@ void MainWindow::on_pushButton_5_clicked()
     ui->pushButton_5->hide();
 
 }
+
 
 // When Sign Up button is clicked
 void MainWindow::on_pushButton_2_clicked()
@@ -198,6 +224,7 @@ void MainWindow::on_pushButton_2_clicked()
 
     // Hide and line edits
     ui->label_3->hide();
+    ui->label_4->hide();
 
     // Hide buttons
     ui->pushButton->hide();
@@ -246,18 +273,20 @@ void MainWindow::on_pushButton_3_clicked()
     {
         // Create a query
         QSqlQuery query(mydb);
-    
+
         // Insert data written to the database filters
         query.prepare("INSERT INTO loginDetails (username, password, status) VALUES (:username, :password, :status)");
         query.bindValue(":username", createUsername);
         query.bindValue(":password", createPassword);
         query.bindValue(":status", addStatus);
-    
+
         if(query.exec())
         {
             // Print message when account is created
-            ui->label_8->setText("Account created, enter your username and password");
+            ui->label_8->setText("Account created.");
             ui->label_8->show();
+            ui->label_5->setText("Enter Username and Password");
+            ui->label_5->show();
 
             // Go to Login window, only if account is successfully registered
             on_pushButton_clicked();
@@ -276,7 +305,7 @@ void MainWindow::on_pushButton_3_clicked()
             ui->label_8->setText("This username already exists");
             ui->label_8->show();
         }
-        
+
         query.finish();
     }
 
@@ -320,20 +349,25 @@ void MainWindow::on_pushButton_4_clicked()
     {
         // Create a query
         QSqlQuery query(mydb);
-    
+
         // Assign strings to database filters
         query.prepare("SELECT * FROM loginDetails WHERE username = :username AND password = :password");
         query.bindValue(":username", username);
         query.bindValue(":password", password);
-    
+
         if(query.exec())
         {
             if(query.next())
             {
                 //ui->label_8->hide();
-                
+
                 ui->label_8->setText("Valid username/password");
                 ui->label_8->show();
+                scooter_management s;
+                s.setModal(true);
+                s.exec();
+
+
             }
             else
             {
@@ -351,5 +385,6 @@ void MainWindow::on_pushButton_4_clicked()
         ui->label_8->show();
     }
 }
+
 
 
