@@ -1,18 +1,22 @@
 #ifndef SCOOTER_MANAGEMENT_H
 #define SCOOTER_MANAGEMENT_H
 
+#include <QDialog>
 #include <QtSql>  // Include Qt SQL module for database functionality
 #include <QDebug> // Include Qt Debug module for debugging output
 
-class scooter_management
+
+namespace Ui {
+class scooter_management;
+}
+
+class scooter_management : public QDialog
 {
+    Q_OBJECT
+
 public:
-    // Constructor to initialize database connection and setup table
-    scooter_management();
-
-    // Destructor to close the database connection
+    explicit scooter_management(QWidget *parent = nullptr);
     ~scooter_management();
-
     // Method to add a new scooter to the database
     void addScooter(const QString& availability, const QString& location, double pricing, const QString& renter);
 
@@ -25,9 +29,18 @@ public:
     // Method to retrieve all scooters from the database
     QList<QVariantMap> getAllScooters();
 
+
+private slots:
+    void on_toolButton_clicked();
+
+    void on_comboBox_activated(int index);
+
+
 private:
+    Ui::scooter_management *ui;
     // Database connection object
     QSqlDatabase db;
 };
 
 #endif // SCOOTER_MANAGEMENT_H
+
