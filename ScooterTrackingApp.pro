@@ -6,13 +6,16 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    scooter_management.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    scooter_management.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    scooter_management.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
