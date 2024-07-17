@@ -1,11 +1,40 @@
 #include "scooter_management.h"
+#include "ui_scooter_management.h"
+#include <QPixmap>
 
-// Constructor implementation
-scooter_management::scooter_management() {
+scooter_management::scooter_management(QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::scooter_management)
+{
+    ui->setupUi(this);
+
+    ui->comboBox->hide();
+
+    // Set Window Color
+    this->setStyleSheet("background-color: rgb(35, 25, 158);");
+
+    ui->pushButton_2->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                    "}" "QPushButton:hover {" "background-color: orange;""}");
+
+    ui->pushButton_3->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                    "}" "QPushButton:hover {" "background-color: orange;""}");
+
+    ui->pushButton_4->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                    "}" "QPushButton:hover {" "background-color: orange;""}");
+
+    ui->toolButton->setStyleSheet("QToolButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                  "}" "QToolButton:hover {" "background-color: orange;""}");
+
+    ui->frame->setStyleSheet("QFrame {" "background-color: black;}");
+
     // Initialize the SQLite database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
     //db.setDatabaseName("database_q.db"); // Set the database name
     db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+
+    QPixmap picture("/Users/juanpostiglione/Downloads/scooter.png");
+    ui->label->setPixmap(picture);
+
 
     // Check if the database opens successfully
     if (!db.open()) {
@@ -25,9 +54,9 @@ scooter_management::scooter_management() {
 
 }
 
-// Destructor implementation
-scooter_management::~scooter_management() {
-    db.close(); // Close the database connection when the object is destroyed
+scooter_management::~scooter_management()
+{
+    delete ui;
 }
 
 // Method to add a new scooter to the database
@@ -91,3 +120,15 @@ QList<QVariantMap> scooter_management::getAllScooters() {
 
     return scooters; // Return the list of scooters
 }
+
+void scooter_management::on_toolButton_clicked()
+{
+    ui->comboBox->show();
+}
+
+
+void scooter_management::on_comboBox_activated(int index)
+{
+    ui->comboBox->hide();
+}
+
