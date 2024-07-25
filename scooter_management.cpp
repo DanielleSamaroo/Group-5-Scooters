@@ -1,17 +1,25 @@
 #include "scooter_management.h"
 #include "ui_scooter_management.h"
+#include "ui_rentscooter.h"
+#include "mainwindow.h"
+#include "rentscooter.h"
 #include <QPixmap>
 
 scooter_management::scooter_management(QWidget *parent)
-    : QDialog(parent)
-    , ui(new Ui::scooter_management)
+    : QDialog(parent),
+      ui(new Ui::scooter_management),
+      mainWindow(nullptr)
 {
     ui->setupUi(this);
 
     ui->comboBox->hide();
 
     // Set Window Color
-    this->setStyleSheet("background-color: rgb(35, 25, 158);");
+    this->setStyleSheet("background-color: rgb(1, 68, 3);");
+
+    ui->pushButton->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                    "}" "QPushButton:hover {" "background-color: orange;""}");
+
 
     ui->pushButton_2->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
                                     "}" "QPushButton:hover {" "background-color: orange;""}");
@@ -27,10 +35,12 @@ scooter_management::scooter_management(QWidget *parent)
 
     ui->frame->setStyleSheet("QFrame {" "background-color: black;}");
 
+     ui->comboBox->setCurrentIndex(0);
+
     // Initialize the SQLite database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
     //db.setDatabaseName("database_q.db"); // Set the database name
-    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
 
     QPixmap picture("/Users/juanpostiglione/Downloads/scooter.png");
     ui->label->setPixmap(picture);
@@ -121,14 +131,57 @@ QList<QVariantMap> scooter_management::getAllScooters() {
     return scooters; // Return the list of scooters
 }
 
+// When Menu button is clicked
 void scooter_management::on_toolButton_clicked()
 {
     ui->comboBox->show();
 }
 
-
+// When an index of the Menu is clicked
 void scooter_management::on_comboBox_activated(int index)
 {
     ui->comboBox->hide();
+    mainWindow = new MainWindow(nullptr);
+     rentScooter window;
+
+    // Switch windows from Menu
+    switch(index)
+    {
+
+    // Go to Rent a Scooter window
+    case 1:
+        this->close();
+        window.setModal(true);
+        window.exec();
+        break;
+
+    // Go to log in Window
+    case 5:
+        this->close();
+        window.close();
+        mainWindow->show();
+        mainWindow->resize(400,500);
+        break;
+    }
+}
+
+// When Log Out button is pressed
+void scooter_management::on_pushButton_3_clicked()
+{
+    // Go to log in window and close current window
+    mainWindow = new MainWindow(nullptr);
+    mainWindow->show();
+    this->close();
+}
+
+// When Rent a Scooter Button is pressed
+void scooter_management::on_pushButton_2_clicked()
+{
+    // Go to rent a scooter window and close current window
+    this->close();
+    rentScooter rent;
+    rent.setModal(true);
+    rent.exec();
+
 }
 
