@@ -365,8 +365,8 @@ void MainWindow::on_pushButton_4_clicked()
                 ui->label_8->show();
                 scooter_management s;
                 s.setModal(true);
+                this->close();
                 s.exec();
-
 
             }
             else
