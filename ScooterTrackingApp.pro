@@ -7,14 +7,17 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    rentscooter.cpp \
     scooter_management.cpp
 
 HEADERS += \
     mainwindow.h \
+    rentscooter.h \
     scooter_management.h
 
 FORMS += \
     mainwindow.ui \
+    rentscooter.ui \
     scooter_management.ui
 
 # Default rules for deployment.
