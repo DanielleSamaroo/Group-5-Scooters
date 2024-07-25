@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QtSql>  // Include Qt SQL module for database functionality
 #include <QDebug> // Include Qt Debug module for debugging output
+#include "mainwindow.h"
+#include "ui_rentscooter.h"
 
 
 namespace Ui {
@@ -36,11 +38,19 @@ private slots:
     void on_comboBox_activated(int index);
 
 
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_2_clicked();
+
+
 private:
     Ui::scooter_management *ui;
+    MainWindow *mainWindow;
+    Ui::rentScooter *ui2;
     // Database connection object
     QSqlDatabase db;
 };
 
 #endif // SCOOTER_MANAGEMENT_H
+
 
