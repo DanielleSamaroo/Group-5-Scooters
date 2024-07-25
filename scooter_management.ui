@@ -41,6 +41,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Return a Scooter</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QPushButton" name="pushButton_3">
       <property name="text">
        <string>Log Out</string>
@@ -146,17 +153,17 @@
     </item>
     <item>
      <property name="text">
-      <string>Log Out</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Seetings</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
       <string>Profile</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Settings</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Log Out</string>
      </property>
     </item>
    </widget>
