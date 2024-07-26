@@ -41,10 +41,14 @@ scooter_management::scooter_management(QWidget *parent)
     db = QSqlDatabase::addDatabase("QSQLITE");
     //db.setDatabaseName("database_q.db"); // Set the database name
     //db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    // db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    db.setDatabaseName("C:/Users/danie/Downloads/Group-5-Scooters-main (2)/Group-5-Scooters-main/database_q.db");
+
 
     //QPixmap picture("/Users/juanpostiglione/Downloads/scooter.png");
-    QPixmap picture("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
+    // QPixmap picture("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
+    QPixmap picture("C:/Users/danie/Downloads/Group-5-Scooters-main (3)/Group-5-Scooters-main/scooter.png");
+
     ui->label->setPixmap(picture);
 
 
@@ -133,6 +137,24 @@ QList<QVariantMap> scooter_management::getAllScooters() {
     return scooters; // Return the list of scooters
 }
 
+// Method to approve a rental request
+bool scooter_management::approveRental(int scooterID, const QString& renter) {
+    QSqlQuery query;
+    query.prepare("UPDATE scooterDetails SET available = 'No', renter = :renter WHERE scooter_id = :scooter_id");
+    query.bindValue(":renter", renter);
+    query.bindValue(":scooter_id", scooterID);
+
+    return query.exec();
+}
+
+// Method to reject a rental request
+bool scooter_management::rejectRental(int scooterID) {
+    QSqlQuery query;
+    query.prepare("UPDATE scooterDetails SET available = 'Yes', renter = NULL WHERE scooter_id = :scooter_id");
+    query.bindValue(":scooter_id", scooterID);
+
+    return query.exec();
+}
 
 // Method to set guestAcc
 void scooter_management::setGuest(bool isGuest)
@@ -196,4 +218,3 @@ void scooter_management::on_pushButton_2_clicked()
     rent.exec();
 
 }
-
