@@ -5,12 +5,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 SOURCES += \
+    account_management.cpp \
     main.cpp \
     mainwindow.cpp \
     rentscooter.cpp \
     scooter_management.cpp
 
 HEADERS += \
+    account_management.h \
     mainwindow.h \
     rentscooter.h \
     scooter_management.h
