@@ -40,9 +40,11 @@ scooter_management::scooter_management(QWidget *parent)
     // Initialize the SQLite database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
     //db.setDatabaseName("database_q.db"); // Set the database name
-    db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    //db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
 
-    QPixmap picture("/Users/juanpostiglione/Downloads/scooter.png");
+    //QPixmap picture("/Users/juanpostiglione/Downloads/scooter.png");
+    QPixmap picture("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
     ui->label->setPixmap(picture);
 
 
@@ -131,6 +133,14 @@ QList<QVariantMap> scooter_management::getAllScooters() {
     return scooters; // Return the list of scooters
 }
 
+
+// Method to set guestAcc
+void scooter_management::setGuest(bool isGuest)
+{
+    guestAcc = isGuest;
+}
+
+
 // When Menu button is clicked
 void scooter_management::on_toolButton_clicked()
 {
@@ -142,7 +152,8 @@ void scooter_management::on_comboBox_activated(int index)
 {
     ui->comboBox->hide();
     mainWindow = new MainWindow(nullptr);
-     rentScooter window;
+    rentScooter window;
+    window.setGuest(guestAcc);
 
     // Switch windows from Menu
     switch(index)
@@ -180,6 +191,7 @@ void scooter_management::on_pushButton_2_clicked()
     // Go to rent a scooter window and close current window
     this->close();
     rentScooter rent;
+    rent.setGuest(guestAcc);
     rent.setModal(true);
     rent.exec();
 

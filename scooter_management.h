@@ -31,6 +31,9 @@ public:
     // Method to retrieve all scooters from the database
     QList<QVariantMap> getAllScooters();
 
+    // Method to set guestAcc
+    void setGuest(bool isGuest);
+
 
 private slots:
     void on_toolButton_clicked();
@@ -49,6 +52,8 @@ private:
     Ui::rentScooter *ui2;
     // Database connection object
     QSqlDatabase db;
+
+    bool guestAcc; // Whether current user is logged in.
 };
 
 #endif // SCOOTER_MANAGEMENT_H

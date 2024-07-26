@@ -91,7 +91,7 @@
      <rect>
       <x>0</x>
       <y>280</y>
-      <width>111</width>
+      <width>100</width>
       <height>32</height>
      </rect>
     </property>
@@ -243,6 +243,19 @@
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>-64</x>
+      <y>480</y>
+      <width>260</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Continue as Guest</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -250,7 +263,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -295,4 +308,3 @@
  <resources/>
  <connections/>
 </ui>
-

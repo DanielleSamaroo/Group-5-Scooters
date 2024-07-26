@@ -22,7 +22,8 @@ rentScooter::rentScooter(QWidget *parent)
     ui->label_6->hide();
 
     // Set Scooter Image
-    QPixmap image("/Users/juanpostiglione/Downloads/scooter.png");
+    //QPixmap image("/Users/juanpostiglione/Downloads/scooter.png");
+    QPixmap image("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
     ui->label->setPixmap(image);
 
     // Use images as emojis for check boxes
@@ -46,11 +47,12 @@ rentScooter::rentScooter(QWidget *parent)
     this->setStyleSheet("background-color: rgb(1, 68, 3);");
 
     // Check the Index Menu
-     ui->comboBox->setCurrentIndex(1);
+    ui->comboBox->setCurrentIndex(1);
 
     // Set Database
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    //db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
 
     if (!db.open()) {
         qDebug() << "Error: Could not open database." << db.lastError();
@@ -152,6 +154,14 @@ rentScooter::~rentScooter()
     delete ui;
 }
 
+
+// Method to set guestAcc
+void rentScooter::setGuest(bool isGuest)
+{
+    guestAcc = isGuest;
+}
+
+
 // Show Menu when tool button is clicked
 void rentScooter::on_toolButton_clicked()
 {
@@ -188,29 +198,39 @@ void rentScooter::on_comboBox_activated(int index)
 // Update scooterDetails table after an user rents a scooter
 void rentScooter::updateUnits(int numRows)
 {
-    if (numRows < scooters.size()) {
-        QVariantMap selectedRow = scooters.at(numRows);
-        QString lotID = selectedRow.value("lot_id").toString();
-        int currentUnits = selectedRow.value("units").toInt();
+    if(!guestAcc)
+    {
+        if (numRows < scooters.size()) {
+            QVariantMap selectedRow = scooters.at(numRows);
+            QString lotID = selectedRow.value("lot_id").toString();
+            int currentUnits = selectedRow.value("units").toInt();
 
-        if (currentUnits > 0) {
-            // Decrement units by 1
-            currentUnits--;
+            if (currentUnits > 0) {
+                // Decrement units by 1
+                currentUnits--;
 
-            // Update the database
-            QSqlQuery query;
-            query.prepare("UPDATE scooterDetails SET units = :units WHERE lot_id = :lot_id");
-            query.bindValue(":units", currentUnits);
-            query.bindValue(":lot_id", lotID);
+                // Update the database
+                QSqlQuery query;
+                query.prepare("UPDATE scooterDetails SET units = :units WHERE lot_id = :lot_id");
+                query.bindValue(":units", currentUnits);
+                query.bindValue(":lot_id", lotID);
 
-            if (query.exec()) {
-                qDebug() << "Units updated successfully for lot_id:" << lotID;
+                if (query.exec()) {
+                    qDebug() << "Units updated successfully for lot_id:" << lotID;
+                    ui->label_6->setText("Scooter rented, go to My Scooters to see your details");
+                } else {
+                    qDebug() << "Error updating units:" << query.lastError().text();
+                    ui->label_6->setText("There was an error with your rental request");
+                }
             } else {
-                qDebug() << "Error updating units:" << query.lastError().text();
+                qDebug() << "No units available for lot_id:" << lotID;
+                ui->label_6->setText("No units available for this lot");
             }
-        } else {
-            qDebug() << "No units available for lot_id:" << lotID;
         }
+    }
+    else
+    {
+        ui->label_6->setText("You must be signed in to place a rental request");
     }
 }
 
@@ -332,3 +352,4 @@ void rentScooter::on_buttonBox_accepted()
     // Show message after rent
     ui->label_6->show();
 }
+

@@ -13,7 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->resize(400,500);
 
-    QPixmap pix("/Users/juanpostiglione/Downloads/scooter.png");
+    //QPixmap pix("/Users/juanpostiglione/Downloads/scooter.png");
+    QPixmap pix("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
     ui->label_4->setPixmap(pix);
 
     // Set Window Color
@@ -57,6 +58,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_5->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
                                     "}" "QPushButton:hover {" "background-color: orange;""}");
 
+    ui->pushButton_6->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
+                                    "}" "QPushButton:hover {" "background-color: orange;""}");
+
+
     // Initially set Button Position
     buttonPosition();
 
@@ -91,10 +96,11 @@ void MainWindow::buttonPosition()
 
     // Buttons Position
     ui->pushButton->move(centerX -200,centerY + 100);
-    ui->pushButton_2->move(centerX -35, centerY + 100);
+    ui->pushButton_2->move(centerX -40, centerY + 100);
     ui->pushButton_4->move(centerX -35,centerY+100);
     ui->pushButton_5->move(centerX -200,centerY+100);
     ui->pushButton_3->move(centerX -40,centerY+100);
+    ui->pushButton_6->move(centerX -200, centerY +165);
 
 }
 
@@ -147,11 +153,12 @@ MainWindow::~MainWindow()
 // When Login button is clicked
 void MainWindow::on_pushButton_clicked()
 {
-    // When button is clicked, hide login, sign up button and title
+    // When button is clicked, hide login & sign up button & title, as well as the Continue as Guest button
     ui->pushButton->hide();
     ui->pushButton_2->hide();
     ui->label_3->hide();
     ui->label_4->hide();
+    ui->pushButton_6->hide();
 
     // Label Names
     ui->label->setText("Username:");
@@ -229,6 +236,7 @@ void MainWindow::on_pushButton_2_clicked()
     // Hide buttons
     ui->pushButton->hide();
     ui->pushButton_2->hide();
+    ui->pushButton_6->hide();
 
     // Set Label Position
     labelPosition();
@@ -245,15 +253,11 @@ void MainWindow::on_pushButton_3_clicked()
 {
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    //mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
     mydb.open();
 
-    if (mydb.open())
-    {
-        qDebug() << "DB opened";
-    }
-    else
+    if (!mydb.open())
     {
         qDebug() << "Db not opened";
     }
@@ -269,8 +273,21 @@ void MainWindow::on_pushButton_3_clicked()
         ui->label_8->setText("Missing fields");
         ui->label_8->show();
     }
+    else if(createUsername.size() > 20)
+    {
+        ui->label_8->setText("Username must not exceed 20 characters");
+        ui->label_8->show();
+    }
+    else if(createPassword.size() < 6 || createPassword.size() > 20)
+    {
+        ui->label_8->setText("Password length must be between 6 and 20 characters");
+        ui->label_8->show();
+    }
     else
     {
+        //Encrypt the password before performing the query
+        createPassword = encryptPassword(createPassword);
+
         // Create a query
         QSqlQuery query(mydb);
 
@@ -318,17 +335,13 @@ void MainWindow::on_pushButton_4_clicked()
 
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    //mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
     mydb.open();
 
 
     // When the databse is opened
-    if(mydb.open())
-    {
-        qDebug() << "DB opened";
-    }
-    else
+    if(!mydb.open())
     {
         qDebug() << "DB not opened";
     }
@@ -344,6 +357,8 @@ void MainWindow::on_pushButton_4_clicked()
     {
         fieldFilled = false;
     }
+
+    password = encryptPassword(password);
 
     if(fieldFilled)
     {
@@ -364,10 +379,11 @@ void MainWindow::on_pushButton_4_clicked()
                 ui->label_8->setText("Valid username/password");
                 ui->label_8->show();
                 scooter_management s;
+                s.setGuest(false);
+
                 s.setModal(true);
                 this->close();
                 s.exec();
-
             }
             else
             {
@@ -387,4 +403,96 @@ void MainWindow::on_pushButton_4_clicked()
 }
 
 
+// When "Continue as Guest" button is pressed
+void MainWindow::on_pushButton_6_clicked()
+{
 
+    // Set Database
+    QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
+    //mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    mydb.open();
+
+    // When the databse is opened
+    if(!mydb.open())
+    {
+        qDebug() << "DB not opened";
+    }
+
+    scooter_management s;
+    s.setGuest(true);
+
+    s.setModal(true);
+    this->close();
+    s.exec();
+}
+
+
+// Function to encrypt each user's password before storing in database.
+QString MainWindow::encryptPassword(QString pwdStr)
+{
+    QString encodedPwd;
+    char16_t newChar;
+
+    char16_t strChar;
+    char16_t keyChar;
+
+    //char16_t QChar::unicode() const
+
+    for(int i = 0; i < pwdStr.size(); i++)
+    {
+        strChar = pwdStr[i].unicode();
+        keyChar = pwdKey[i].unicode();
+
+        // XOR password with the key to encrypt.
+        newChar = strChar ^ keyChar;
+
+        // Store encrypted password as only printable values
+        if(newChar > 79)
+        {
+            newChar -= 47;
+        }
+        if(newChar < 79)
+        {
+            newChar += 47;
+        }
+
+        QChar tempChar(newChar);
+        encodedPwd.append(tempChar);
+    }
+    return encodedPwd;
+}
+
+
+// Function to decrypt each user's password after reading from database.
+QString MainWindow::decryptPassword(QString pwdStr)
+{
+    QString decodedPwd;
+    char16_t newChar;
+
+    char16_t strChar;
+    char16_t keyChar;
+
+    for(int i = 0; i < pwdStr.size(); i++)
+    {
+        strChar = pwdStr[i].unicode();
+        keyChar = pwdKey[i].unicode();
+
+        // Revert characters back to their potentially unprintable forms.
+        if(strChar > 79)
+        {
+            strChar -= 47;
+        }
+        if(strChar < 79)
+        {
+            strChar += 47;
+        }
+
+        // XOR encrypted password with the key to decrypt.
+        newChar = strChar ^ keyChar;
+
+        QChar tempChar(newChar);
+        decodedPwd.append(tempChar);
+    }
+    return decodedPwd;
+}

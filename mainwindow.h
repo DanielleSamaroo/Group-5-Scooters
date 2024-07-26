@@ -5,6 +5,10 @@
 #include <QtSql>
 #include <QDebug>
 #include <QFileInfo>
+#include <QString>
+#include <QChar>
+#include <stdio.h>
+#include <uchar.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -60,9 +64,19 @@ private slots:
     // Function for Push Button 4 ( Next )
     void on_pushButton_4_clicked();
 
+    // Function for Push Button 6 (Continue as Guest)
+    void on_pushButton_6_clicked();
+
 private:
 
     Ui::MainWindow *ui;
+    QString pwdKey = "HI0qnP4YuI1WttiUie0e"; // Key used for password encryption and decryption
+
+    // Function to encrypt and decrypt each user's password before storing in database.
+    QString encryptPassword(QString pwdStr);
+
+    // Function to decrypt each user's password after reading from database.
+    QString decryptPassword(QString pwdStr);
 };
 #endif // MAINWINDOW_H
 

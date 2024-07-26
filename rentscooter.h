@@ -19,6 +19,9 @@ public:
     explicit rentScooter(QWidget *parent = nullptr);
     ~rentScooter();
 
+    // Method to set guestRent
+    void setGuest(bool isGuest);
+
 private slots:
 
     void on_toolButton_clicked();
@@ -45,6 +48,8 @@ private:
     Ui::rentScooter *ui;
     MainWindow *mainWindow;
     QList<QVariantMap> scooters; // Create a list to hold the scooter records
+
+    bool guestAcc; // Whether current user is logged in.
 };
 
 #endif // RENTSCOOTER_H
