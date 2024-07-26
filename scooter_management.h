@@ -31,6 +31,12 @@ public:
     // Method to retrieve all scooters from the database
     QList<QVariantMap> getAllScooters();
 
+    // Method to approve a rental request
+    bool approveRental(int scooterID, const QString& renter);
+
+    // Method to reject a rental request
+    bool rejectRental(int scooterID);
+
     // Method to set guestAcc
     void setGuest(bool isGuest);
 
@@ -57,5 +63,3 @@ private:
 };
 
 #endif // SCOOTER_MANAGEMENT_H
-
-
