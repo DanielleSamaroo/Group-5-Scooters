@@ -1,14 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "scooter_management.h"
+#include "account_management.h"
 #include <QPixmap>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-
-
     ui->setupUi(this);
 
     this->resize(400,500);
@@ -70,6 +69,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Initially set Label Position
     labelPosition();
+
+    account_management accs;
 }
 
 
@@ -97,7 +98,7 @@ void MainWindow::buttonPosition()
     // Buttons Position
     ui->pushButton->move(centerX -200,centerY + 100);
     ui->pushButton_2->move(centerX -40, centerY + 100);
-    ui->pushButton_4->move(centerX -35,centerY+100);
+    ui->pushButton_4->move(centerX -40,centerY+100);
     ui->pushButton_5->move(centerX -200,centerY+100);
     ui->pushButton_3->move(centerX -40,centerY+100);
     ui->pushButton_6->move(centerX -200, centerY +165);
@@ -190,9 +191,10 @@ void MainWindow::on_pushButton_clicked()
 // When "Back" button is clicked
 void MainWindow::on_pushButton_5_clicked()
 {
-    // Show title, login and sign op button
+    // Show title, guest, login, and sign up buttons
     ui->pushButton->show();
     ui->pushButton_2->show();
+    ui->pushButton_6->show();
     ui->label_3->show();
     ui->label_4->show();
 
@@ -380,6 +382,9 @@ void MainWindow::on_pushButton_4_clicked()
                 ui->label_8->show();
                 scooter_management s;
                 s.setGuest(false);
+                scooter_management* sPoint = &s;
+                s.setCurrent(sPoint);
+                s.setCurrentUser(username);
 
                 s.setModal(true);
                 this->close();
@@ -421,7 +426,8 @@ void MainWindow::on_pushButton_6_clicked()
 
     scooter_management s;
     s.setGuest(true);
-
+    scooter_management* sPoint = &s;
+    s.setCurrent(sPoint);
     s.setModal(true);
     this->close();
     s.exec();

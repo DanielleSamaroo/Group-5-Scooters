@@ -2,7 +2,8 @@
 #define RENTSCOOTER_H
 
 #include <QDialog>
-#include <mainwindow.h>
+#include "mainwindow.h"
+#include "scooter_management.h"
 #include <QDebug>
 #include <QtSql>
 #include <QFileInfo>
@@ -19,8 +20,29 @@ public:
     explicit rentScooter(QWidget *parent = nullptr);
     ~rentScooter();
 
+    // Set the font attributes of labels
+    void setFontAttributes();
+
+    // Set the Labels Position
+    void labelPosition();
+
     // Method to set guestRent
     void setGuest(bool isGuest);
+
+    // Method to set scooter_management pointer
+    void setScooterMgmt(scooter_management* s);
+
+    // Method to set current user
+    void setCurrentUser(QString& userN);
+
+    // Method to update lots value
+    void updateLots();
+
+    // Method to get lots value
+    QList<QVariantMap> getLots();
+
+    // Update scooterDetails and scooterIndex tables after an user rents a scooter
+    void rentUnit(int numRows);
 
 private slots:
 
@@ -42,14 +64,17 @@ private slots:
 
     void on_buttonBox_accepted();
 
-    void updateUnits(int numRows);
-
 private:
     Ui::rentScooter *ui;
     MainWindow *mainWindow;
+    scooter_management *scootMgmt;
+    QList<QVariantMap> lots; // Create a list to hold the lot info
     QList<QVariantMap> scooters; // Create a list to hold the scooter records
 
+    QSqlDatabase db; // Database connection object
+
     bool guestAcc; // Whether current user is logged in.
+    QString currentUser;
 };
 
 #endif // RENTSCOOTER_H

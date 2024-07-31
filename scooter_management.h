@@ -20,16 +20,19 @@ public:
     explicit scooter_management(QWidget *parent = nullptr);
     ~scooter_management();
     // Method to add a new scooter to the database
-    void addScooter(const QString& availability, const QString& location, double pricing, const QString& renter);
+    void addScooter(const QString& available, const QString& nearLot, int lotDistance, int rentalRate, const QString& renter, const QString& status);
 
     // Method to update an existing scooter's details in the database
-    void updateScooter(int id, const QString& availability, const QString& location, double pricing, const QString& renter);
+    bool updateScooter(int id, const QString& available, const QString& nearLot, int lotDistance, int rentalRate, const QString& renter, const QString& status);
 
     // Method to delete a scooter from the database
     void deleteScooter(int id);
 
     // Method to retrieve all scooters from the database
     QList<QVariantMap> getAllScooters();
+
+    // Method to send a rental request
+    bool requestRental(int scooterID, const QString& renter);
 
     // Method to approve a rental request
     bool approveRental(int scooterID, const QString& renter);
@@ -40,6 +43,17 @@ public:
     // Method to set guestAcc
     void setGuest(bool isGuest);
 
+    // Method to set *current
+    void setCurrent(scooter_management* sPoint);
+
+    // Method to set current user
+    void setCurrentUser(QString& userN);
+
+    // Method to return the scooter_id from the given lot, or -1 if no scooters are available
+    int getAvailableFromLot(const QString& sLotName);
+
+    // Method to get number of rentals for current user
+    int getNumRented(QString& userN);
 
 private slots:
     void on_toolButton_clicked();
@@ -51,6 +65,7 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_pushButton_4_clicked();
 
 private:
     Ui::scooter_management *ui;
@@ -59,7 +74,10 @@ private:
     // Database connection object
     QSqlDatabase db;
 
+    scooter_management *current; // Pointer to current instance of scooter_management
     bool guestAcc; // Whether current user is logged in.
+    QString currentUser;
+
 };
 
 #endif // SCOOTER_MANAGEMENT_H

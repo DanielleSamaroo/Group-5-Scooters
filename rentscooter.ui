@@ -92,12 +92,7 @@
     </item>
     <item>
      <property name="text">
-      <string>My Scooter</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Profile</string>
+      <string>My Scooters</string>
      </property>
     </item>
     <item>
@@ -130,7 +125,7 @@
     <rect>
      <x>210</x>
      <y>200</y>
-     <width>521</width>
+     <width>421</width>
      <height>251</height>
     </rect>
    </property>
@@ -190,7 +185,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Select a Scooter:</string>
+    <string>Select a lot to rent from:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
@@ -345,6 +340,71 @@
    </property>
    <property name="text">
     <string>Scooter rented, go to My Scooters to see your details</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_20">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>225</y>
+     <width>375</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>LInvalid Username or Password</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_21">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>270</y>
+     <width>421</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>LInvalid Username or Password</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_22">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>320</y>
+     <width>421</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>LInvalid Username or Password</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_23">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>360</y>
+     <width>421</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>LInvalid Username or Password</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_24">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>410</y>
+     <width>421</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>LInvalid Username or Password</string>
    </property>
   </widget>
  </widget>

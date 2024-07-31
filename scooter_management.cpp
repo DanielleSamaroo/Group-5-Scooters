@@ -3,6 +3,7 @@
 #include "ui_rentscooter.h"
 #include "mainwindow.h"
 #include "rentscooter.h"
+#include "myscooters.h"
 #include <QPixmap>
 
 scooter_management::scooter_management(QWidget *parent)
@@ -16,7 +17,7 @@ scooter_management::scooter_management(QWidget *parent)
 
     // Set Window Color
     this->setStyleSheet("background-color: rgb(1, 68, 3);");
-
+    ui->label_2->setStyleSheet("QLabel { color : rgb(255, 165, 0); }");
     ui->pushButton->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
                                     "}" "QPushButton:hover {" "background-color: orange;""}");
 
@@ -41,13 +42,13 @@ scooter_management::scooter_management(QWidget *parent)
     db = QSqlDatabase::addDatabase("QSQLITE");
     //db.setDatabaseName("database_q.db"); // Set the database name
     //db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    // db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
-    db.setDatabaseName("C:/Users/danie/Downloads/Group-5-Scooters-main (2)/Group-5-Scooters-main/database_q.db");
+    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    //db.setDatabaseName("C:/Users/danie/Downloads/Group-5-Scooters-main (2)/Group-5-Scooters-main/database_q.db");
 
 
     //QPixmap picture("/Users/juanpostiglione/Downloads/scooter.png");
-    // QPixmap picture("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
-    QPixmap picture("C:/Users/danie/Downloads/Group-5-Scooters-main (3)/Group-5-Scooters-main/scooter.png");
+    QPixmap picture("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
+    //QPixmap picture("C:/Users/danie/Downloads/Group-5-Scooters-main (3)/Group-5-Scooters-main/scooter.png");
 
     ui->label->setPixmap(picture);
 
@@ -59,15 +60,30 @@ scooter_management::scooter_management(QWidget *parent)
     }
 
 
-    // Create a SQL query to create the scooterDetails table if it doesn't exist
+    // Create a SQL query to create the scooterIndex table if it doesn't exist
     QSqlQuery query;
-    query.exec("CREATE TABLE IF NOT EXISTS scooterDetails ("
+    query.prepare("CREATE TABLE IF NOT EXISTS scooterIndex ("
                "scooter_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                "available TEXT, "
-               "location TEXT, "
-               "rental_rate INTEGER, "
-               "renter TEXT)");
+               "nearest_lot TEXT, "
+               "lot_distance INTEGER, " // Distance to nearest lot in miles
+               "rental_rate INTEGER, " // In dollars (per hour)
+               "renter TEXT, "
+               "status TEXT)");
+    query.exec();
 
+    if(false)
+    {
+        // Add scooters if scooterIndex table is empty
+        for(int i = 0; i < 10; i++)
+        {
+            addScooter("Yes", "LOT A", 0, 4, "", "Available");
+            addScooter("Yes", "LOT B", 0, 4, "", "Available");
+            addScooter("Yes", "LOT C", 0, 4, "", "Available");
+            addScooter("Yes", "LOT D", 0, 4, "", "Available");
+            addScooter("Yes", "LOT E", 0, 4, "", "Available");
+        }
+    }
 }
 
 scooter_management::~scooter_management()
@@ -76,14 +92,17 @@ scooter_management::~scooter_management()
 }
 
 // Method to add a new scooter to the database
-void scooter_management::addScooter(const QString& sAvailability, const QString& sLocation, double sPricing, const QString& sRenter) {
+void scooter_management::addScooter(const QString& sAvailable, const QString& sNearLot, int sLotDistance, int sRentalRate, const QString& sRenter, const QString& sStatus)
+{
     // Prepare an SQL query to insert a new scooter record
     QSqlQuery query;
-    query.prepare("INSERT INTO scooterDetails (available, location, rental_rate, renter) VALUES (:availability, :location, :pricing, :renter)");
-    query.bindValue(":availability", sAvailability); // Bind the availability parameter
-    query.bindValue(":location", sLocation); // Bind the location parameter
-    query.bindValue(":pricing", sPricing); // Bind the pricing parameter
+    query.prepare("INSERT INTO scooterIndex (available, nearest_lot, lot_distance, rental_rate, renter, status) VALUES (:available, :nearest_lot, :lot_distance, :rental_rate, :renter, :status)");
+    query.bindValue(":available", sAvailable); // Bind the available parameter
+    query.bindValue(":nearest_lot", sNearLot); // Bind the nearest lot parameter
+    query.bindValue(":lot_distance", sLotDistance); // Bind the lot distance parameter
+    query.bindValue(":rental_rate", sRentalRate); // Bind the rental rate parameter
     query.bindValue(":renter", sRenter); // Bind the renter parameter
+    query.bindValue(":status", sStatus); // Bind the status parameter
 
     if (!query.exec()) {
         qDebug() << "Error adding scooter: " << query.lastError().text();
@@ -91,26 +110,31 @@ void scooter_management::addScooter(const QString& sAvailability, const QString&
 }
 
 // Method to update an existing scooter's details in the database
-void scooter_management::updateScooter(int sID, const QString& sAvailability, const QString& sLocation, double sPricing, const QString& sRenter ) {
+bool scooter_management::updateScooter(int sID, const QString& sAvailable, const QString& sNearLot, int sLotDistance, int sRentalRate, const QString& sRenter, const QString& sStatus)
+{
     // Prepare an SQL query to update a scooter record based on its ID
     QSqlQuery query;
-    query.prepare("UPDATE scooterDetails SET available = :availability, location = :location, rental_rate = :pricing, renter = :renter WHERE scooter_id = :id");
-    query.bindValue(":availability", sAvailability); // Bind the availability parameter
-    query.bindValue(":location", sLocation); // Bind the location parameter
-    query.bindValue(":pricing", sPricing); // Bind the pricing parameter
-    query.bindValue(":id", sID); // Bind the ID parameter
+    query.prepare("UPDATE scooterIndex SET available = :available, nearest_lot = :nearest_lot, lot_distance = :lot_distance, rental_rate = :rental_rate, renter = :renter, status = :status WHERE scooter_id = :id");
+    query.bindValue(":available", sAvailable); // Bind the available parameter
+    query.bindValue(":nearest_lot", sNearLot); // Bind the nearest lot parameter
+    query.bindValue(":lot_distance", sLotDistance); // Bind the lot distance parameter
+    query.bindValue(":rental_rate", sRentalRate); // Bind the rental rate parameter
     query.bindValue(":renter", sRenter); // Bind the renter parameter
+    query.bindValue(":status", sStatus); // Bind the status parameter
+    query.bindValue(":id", sID); // Bind the ID parameter
 
     if (!query.exec()) {
         qDebug() << "Error updating scooter: " << query.lastError().text();
+        return false;
     }
+    return true;
 }
 
 // Method to delete a scooter from the database
 void scooter_management::deleteScooter(int sID) {
     // Prepare an SQL query to delete a scooter record based on its ID
     QSqlQuery query;
-    query.prepare("DELETE FROM scooterDetails WHERE scooter_id = :id");
+    query.prepare("DELETE FROM scooterIndex WHERE scooter_id = :id");
     query.bindValue(":id", sID); // Bind the ID parameter
 
     if (!query.exec()) {
@@ -121,26 +145,38 @@ void scooter_management::deleteScooter(int sID) {
 // Method to retrieve all scooters from the database
 QList<QVariantMap> scooter_management::getAllScooters() {
     QList<QVariantMap> scooters; // Create a list to hold the scooter records
-    QSqlQuery query("SELECT * FROM scooterDetails"); // Execute an SQL query to select all records from the scooterDetails table
+    QSqlQuery query("SELECT * FROM scooterIndex"); // Execute an SQL query to select all records from the scooterDetails table
 
     // Iterate over the result set
     while (query.next()) {
         QVariantMap scooter; // Create a map to hold the scooter details
         scooter["scooter_id"] = query.value("scooter_id"); // Retrieve and store the ID value
-        scooter["available"] = query.value("available"); // Retrieve and store the availability value
-        scooter["location"] = query.value("location"); // Retrieve and store the location value
-        scooter["rental_rate"] = query.value("rental_rate"); // Retrieve and store the pricing value
+        scooter["available"] = query.value("available"); // Retrieve and store the available value
+        scooter["nearest_lot"] = query.value("nearest_lot"); // Retrieve and store the nearest lot value
+        scooter["lot_distance"] = query.value("lot_distance"); // Retrieve and store the lot distance value
+        scooter["rental_rate"] = query.value("rental_rate"); // Retrieve and store the rental rate value
         scooter["renter"] = query.value("renter"); // Retrieve and store the renter value
+        scooter["status"] = query.value("status"); // Retrieve and store the status value
         scooters.append(scooter); // Add the map to the list
     }
 
     return scooters; // Return the list of scooters
 }
 
+// Method to send a rental request
+bool scooter_management::requestRental(int scooterID, const QString& renter)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE scooterIndex SET available = 'No', renter = :renter, status = 'Pending' WHERE scooter_id = :scooter_id");
+    query.bindValue(":renter", renter);
+    query.bindValue(":scooter_id", scooterID);
+    return query.exec();
+}
+
 // Method to approve a rental request
 bool scooter_management::approveRental(int scooterID, const QString& renter) {
     QSqlQuery query;
-    query.prepare("UPDATE scooterDetails SET available = 'No', renter = :renter WHERE scooter_id = :scooter_id");
+    query.prepare("UPDATE scooterIndex SET available = 'No', renter = :renter, status = 'Rented' WHERE scooter_id = :scooter_id");
     query.bindValue(":renter", renter);
     query.bindValue(":scooter_id", scooterID);
 
@@ -150,7 +186,7 @@ bool scooter_management::approveRental(int scooterID, const QString& renter) {
 // Method to reject a rental request
 bool scooter_management::rejectRental(int scooterID) {
     QSqlQuery query;
-    query.prepare("UPDATE scooterDetails SET available = 'Yes', renter = NULL WHERE scooter_id = :scooter_id");
+    query.prepare("UPDATE scooterIndex SET available = 'Yes', renter = NULL, status = 'Available' WHERE scooter_id = :scooter_id");
     query.bindValue(":scooter_id", scooterID);
 
     return query.exec();
@@ -160,6 +196,86 @@ bool scooter_management::rejectRental(int scooterID) {
 void scooter_management::setGuest(bool isGuest)
 {
     guestAcc = isGuest;
+}
+
+
+// Method to set *current
+void scooter_management::setCurrent(scooter_management* sPoint)
+{
+    current = sPoint;
+}
+
+// Method to set current user
+void scooter_management::setCurrentUser(QString& userN)
+{
+    currentUser = userN;
+}
+
+
+// Method to return the scooter_id from the given lot, or -1 if no scooters are available
+int scooter_management::getAvailableFromLot(const QString& sLotName)
+{
+    QList<QVariantMap> scooters; // Create a list to hold the scooter records
+    QSqlQuery query;
+    query.prepare("SELECT * FROM scooterIndex");
+    query.exec();
+
+    // Iterate over the result set
+    while(query.next())
+    {
+        QVariantMap scooter; // Create a map to hold the scooter details
+        scooter["scooter_id"] = query.value("scooter_id"); // Retrieve and store the ID value
+        scooter["available"] = query.value("available"); // Retrieve and store the available value
+        scooter["nearest_lot"] = query.value("nearest_lot"); // Retrieve and store the nearest lot value
+        scooter["lot_distance"] = query.value("lot_distance"); // Retrieve and store the lot distance value
+        scooter["rental_rate"] = query.value("rental_rate"); // Retrieve and store the rental rate value
+        scooter["renter"] = query.value("renter"); // Retrieve and store the renter value
+        scooter["status"] = query.value("status"); // Retrieve and store the status value
+        scooters.append(scooter); // Add the map to the list
+    }
+
+    for(int index = 0; index < scooters.size(); index++)
+    {
+        if(scooters[index].value("available") == "Yes" && scooters[index].value("nearest_lot") == sLotName)
+        {
+            return scooters[index].value("scooter_id").toString().toInt();
+        }
+    }
+    return -1;
+}
+
+
+// Method to get number of rentals for current user
+int scooter_management::getNumRented(QString& userN)
+{
+    QList<QVariantMap> scooters; // Create a list to hold the scooter records
+    QSqlQuery query;
+    query.prepare("SELECT * FROM scooterIndex");
+    query.exec();
+
+    // Iterate over the result set
+    while(query.next())
+    {
+        QVariantMap scooter; // Create a map to hold the scooter details
+        scooter["scooter_id"] = query.value("scooter_id"); // Retrieve and store the ID value
+        scooter["available"] = query.value("available"); // Retrieve and store the available value
+        scooter["nearest_lot"] = query.value("nearest_lot"); // Retrieve and store the nearest lot value
+        scooter["lot_distance"] = query.value("lot_distance"); // Retrieve and store the lot distance value
+        scooter["rental_rate"] = query.value("rental_rate"); // Retrieve and store the rental rate value
+        scooter["renter"] = query.value("renter"); // Retrieve and store the renter value
+        scooter["status"] = query.value("status"); // Retrieve and store the status value
+        scooters.append(scooter); // Add the map to the list
+    }
+    int count = 0;
+
+    for(int index = 0; index < scooters.size(); index++)
+    {
+        if(scooters[index].value("available") == "No" && scooters[index].value("renter").toString() == userN)
+        {
+            count++;
+        }
+    }
+    return count;
 }
 
 
@@ -174,27 +290,44 @@ void scooter_management::on_comboBox_activated(int index)
 {
     ui->comboBox->hide();
     mainWindow = new MainWindow(nullptr);
-    rentScooter window;
-    window.setGuest(guestAcc);
+    rentScooter rentS;
+    rentS.setGuest(guestAcc);
+    rentS.setScooterMgmt(current);
+    rentS.setCurrentUser(currentUser);
+
+    myscooters myS;
+    myS.setGuest(guestAcc);
+    myS.setScooterMgmt(current);
+    myS.setRScooter(&rentS);
+    myS.setCurrentUser(currentUser);
+    myS.updateDisplay();
 
     // Switch windows from Menu
     switch(index)
     {
 
-    // Go to Rent a Scooter window
-    case 1:
-        this->close();
-        window.setModal(true);
-        window.exec();
-        break;
+        // Go to Rent a Scooter window
+        case 1:
+            this->close();
+            rentS.setModal(true);
+            rentS.exec();
+            break;
 
-    // Go to log in Window
-    case 5:
-        this->close();
-        window.close();
-        mainWindow->show();
-        mainWindow->resize(400,500);
-        break;
+        // Go to My Scooters window
+        case 2:
+            this->close();
+            myS.setModal(true);
+            myS.exec();
+            //qDebug() << "idk2";
+            break;
+
+        // Go to log in Window
+        case 4:
+            this->close();
+            rentS.close();
+            mainWindow->show();
+            mainWindow->resize(400,500);
+            break;
     }
 }
 
@@ -207,14 +340,39 @@ void scooter_management::on_pushButton_3_clicked()
     this->close();
 }
 
-// When Rent a Scooter Button is pressed
+// When Rent a Scooter button is pressed
 void scooter_management::on_pushButton_2_clicked()
 {
     // Go to rent a scooter window and close current window
     this->close();
     rentScooter rent;
     rent.setGuest(guestAcc);
+    rent.setScooterMgmt(current);
+    rent.setCurrentUser(currentUser);
     rent.setModal(true);
     rent.exec();
 
+}
+
+// When My Scooters button is pressed
+void scooter_management::on_pushButton_4_clicked()
+{
+    // Go to My Scooters window and close current window
+    this->close();
+
+    rentScooter rentS;
+    rentS.setGuest(guestAcc);
+    rentS.setScooterMgmt(current);
+    rentS.setCurrentUser(currentUser);
+
+
+    myscooters myS;
+    myS.setGuest(guestAcc);
+    myS.setScooterMgmt(current);
+    myS.setRScooter(&rentS);
+    myS.setCurrentUser(currentUser);
+    myS.updateDisplay();
+    myS.setModal(true);
+    myS.exec();
+    //qDebug() << "idk";
 }

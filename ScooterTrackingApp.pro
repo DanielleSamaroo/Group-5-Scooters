@@ -8,17 +8,20 @@ SOURCES += \
     account_management.cpp \
     main.cpp \
     mainwindow.cpp \
+    myscooters.cpp \
     rentscooter.cpp \
     scooter_management.cpp
 
 HEADERS += \
     account_management.h \
     mainwindow.h \
+    myscooters.h \
     rentscooter.h \
     scooter_management.h
 
 FORMS += \
     mainwindow.ui \
+    myscooters.ui \
     rentscooter.ui \
     scooter_management.ui
 
