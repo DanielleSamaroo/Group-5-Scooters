@@ -4,6 +4,8 @@
 #include "mainwindow.h"
 #include "rentscooter.h"
 #include "myscooters.h"
+#include "account_management.h"
+#include "settingswindow.h"
 #include <QPixmap>
 
 scooter_management::scooter_management(QWidget *parent)
@@ -302,6 +304,14 @@ void scooter_management::on_comboBox_activated(int index)
     myS.setCurrentUser(currentUser);
     myS.updateDisplay();
 
+    account_management a;
+
+    settingsWindow settings;
+    settings.setGuest(guestAcc);
+    settings.setCurrentUser(currentUser);
+    settings.setAccMgmt(&a);
+    settings.setScooterMgmt(current);
+
     // Switch windows from Menu
     switch(index)
     {
@@ -318,7 +328,14 @@ void scooter_management::on_comboBox_activated(int index)
             this->close();
             myS.setModal(true);
             myS.exec();
-            //qDebug() << "idk2";
+            break;
+
+        // Go to Settings window
+        case 3:
+            this->close();
+
+            settings.setModal(true);
+            settings.exec();
             break;
 
         // Go to log in Window
@@ -330,6 +347,24 @@ void scooter_management::on_comboBox_activated(int index)
             break;
     }
 }
+
+
+// When Settings button is pressed
+void scooter_management::on_pushButton_clicked()
+{
+    // Go to settings window and close current window
+    this->close();
+    account_management a;
+
+    settingsWindow settings;
+    settings.setGuest(guestAcc);
+    settings.setCurrentUser(currentUser);
+    settings.setAccMgmt(&a);
+    settings.setScooterMgmt(current);
+    settings.setModal(true);
+    settings.exec();
+}
+
 
 // When Log Out button is pressed
 void scooter_management::on_pushButton_3_clicked()
@@ -374,5 +409,4 @@ void scooter_management::on_pushButton_4_clicked()
     myS.updateDisplay();
     myS.setModal(true);
     myS.exec();
-    //qDebug() << "idk";
 }

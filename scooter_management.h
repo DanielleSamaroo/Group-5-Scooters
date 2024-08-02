@@ -60,11 +60,16 @@ private slots:
 
     void on_comboBox_activated(int index);
 
+    // Settings button
+    void on_pushButton_clicked();
 
+    // Log Out button
     void on_pushButton_3_clicked();
 
+    // Rent a Scooter button
     void on_pushButton_2_clicked();
 
+    // My Scooters button
     void on_pushButton_4_clicked();
 
 private:

@@ -22,6 +22,9 @@ public:
     // Demotes an employee or administrator to a regular user role.
     bool demoteAccount(const QString& username);
 
+    // Changes the username and password of the given user
+    bool changeUserPass(QString& oldUser, QString& newUser, QString& newPass);
+
     // Retrieves all accounts from the database and returns them as a list of QVariantMap.
     QList<QVariantMap> getAllAccounts();
 

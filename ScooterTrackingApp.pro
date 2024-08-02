@@ -10,20 +10,23 @@ SOURCES += \
     mainwindow.cpp \
     myscooters.cpp \
     rentscooter.cpp \
-    scooter_management.cpp
+    scooter_management.cpp \
+    settingswindow.cpp
 
 HEADERS += \
     account_management.h \
     mainwindow.h \
     myscooters.h \
     rentscooter.h \
-    scooter_management.h
+    scooter_management.h \
+    settingswindow.h
 
 FORMS += \
     mainwindow.ui \
     myscooters.ui \
     rentscooter.ui \
-    scooter_management.ui
+    scooter_management.ui \
+    settingswindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

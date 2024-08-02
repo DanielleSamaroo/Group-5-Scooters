@@ -2,7 +2,8 @@
 #include "ui_myscooters.h"
 #include "scooter_management.h"
 #include "rentscooter.h"
-#include<QSqlQuery>
+#include "settingswindow.h"
+#include <QSqlQuery>
 #include <QPixmap>
 #include <QtSql>
 
@@ -195,7 +196,7 @@ void myscooters::returnUnit(int scootID)
     }
     else
     {
-        ui->label_6->setText("You must be signed in to place a rental request");
+        ui->label_6->setText("You must be signed in to view your scooters");
     }
 }
 
@@ -204,9 +205,7 @@ void myscooters::returnUnit(int scootID)
 void myscooters::updateDisplay()
 {
     lots = rScooter->getLots();
-    //qDebug() << "lots";
     scooters = scootMgmt->getAllScooters();
-    //qDebug() << "scooters";
 
     ui->label_9->hide();
 
@@ -221,7 +220,6 @@ void myscooters::updateDisplay()
     ui->label_32->setText(text32);
     ui->label_33->setText(text33);
     ui->label_34->setText(text34);
-    //qDebug() << "set default";
 
     int index1 = -1;
     int index2 = -1;
@@ -238,13 +236,11 @@ void myscooters::updateDisplay()
         for(int i = 0; i < scooters.size(); i++)
         {
             QString userN = scooters[i].value("renter").toString();
-            //qDebug() << "loop";
 
             if(userN == currentUser)
             {
                 if(index1 == -1)
                 {
-                    //qDebug() << "i = " << i;
                     index1 = i;
 
                     QString ID = scooters[i].value("scooter_id").toString();
@@ -265,7 +261,6 @@ void myscooters::updateDisplay()
                 }
                 else if(index2 == -1)
                 {
-                    //qDebug() << "i = " << i;
                     index2 = i;
 
                     QString ID = scooters[i].value("scooter_id").toString();
@@ -285,7 +280,6 @@ void myscooters::updateDisplay()
                 }
                 else if(index3 == -1)
                 {
-                    //qDebug() << "i = " << i;
                     index3 = i;
 
                     QString ID = scooters[i].value("scooter_id").toString();
@@ -305,7 +299,6 @@ void myscooters::updateDisplay()
                 }
                 else if(index4 == -1)
                 {
-                    //qDebug() << "i = " << i;
                     index4 = i;
 
                     QString ID = scooters[i].value("scooter_id").toString();
@@ -325,7 +318,6 @@ void myscooters::updateDisplay()
                 }
                 else if(index5 == -1)
                 {
-                    //qDebug() << "i = " << i;
                     index5 = i;
 
                     QString ID = scooters[i].value("scooter_id").toString();
@@ -345,7 +337,6 @@ void myscooters::updateDisplay()
                 }
             }
         }
-        //qDebug() << "loop over";
     }
     else
     {
@@ -384,6 +375,14 @@ void myscooters::on_comboBox_2_activated(int index)
     myS.setScooterMgmt(scootMgmt);
     myS.setCurrentUser(currentUser);
 
+    account_management a;
+
+    settingsWindow settings;
+    settings.setGuest(guestAcc);
+    settings.setCurrentUser(currentUser);
+    settings.setAccMgmt(&a);
+    settings.setScooterMgmt(scootMgmt);
+
     switch(index)
     {
     // Go to Home window
@@ -398,6 +397,14 @@ void myscooters::on_comboBox_2_activated(int index)
         this->close();
         rentS.setModal(true);
         rentS.exec();
+        break;
+
+    // Go to Settings window
+    case 3:
+        this->close();
+
+        settings.setModal(true);
+        settings.exec();
         break;
 
         // Go to log in Window

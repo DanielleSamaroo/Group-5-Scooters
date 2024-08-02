@@ -71,8 +71,42 @@ bool account_management::promoteAccount(const QString& username, const QString& 
 // Demotes an employee or administrator to a regular user role.
 bool account_management::demoteAccount(const QString& username) {
     QSqlQuery query;
-    query.prepare("UPDATE loginDetails SET role = 'user' WHERE username = :username");
+    query.prepare("UPDATE loginDetails SET role = 'customer' WHERE username = :username");
     query.bindValue(":username", username);
+
+    // Execute the query and return whether it was successful
+    return query.exec();
+}
+
+// Changes the username and password of the given user
+bool account_management::changeUserPass(QString& oldUser, QString& newUser, QString& newPass)
+{
+    // Check if username has changed
+    if(newUser == "")
+    {
+        // Username will not change if field is blank
+        newUser = oldUser;
+    }
+    QSqlQuery query;
+
+    // Check if password has changed
+    if(newPass != "")
+    {
+        newPass = encryptPassword(newPass);
+
+        // Change password
+        query.prepare("UPDATE loginDetails SET username = :new_user, password = :password WHERE username = :old_user");
+        query.bindValue(":new_user", newUser);
+        query.bindValue(":password", newPass);
+        query.bindValue(":old_user", oldUser);
+    }
+    else
+    {
+        // Don't change password
+        query.prepare("UPDATE loginDetails SET username = :new_user WHERE username = :old_user");
+        query.bindValue(":new_user", newUser);
+        query.bindValue(":old_user", oldUser);
+    }
 
     // Execute the query and return whether it was successful
     return query.exec();

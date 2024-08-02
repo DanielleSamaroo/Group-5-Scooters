@@ -2,7 +2,8 @@
 #include "ui_rentscooter.h"
 #include "scooter_management.h"
 #include "myscooters.h"
-#include<QSqlQuery>
+#include "settingswindow.h"
+#include <QSqlQuery>
 #include <QPixmap>
 #include <QtSql>
 
@@ -500,6 +501,14 @@ void rentScooter::on_comboBox_activated(int index)
     myS.setCurrentUser(currentUser);
     myS.updateDisplay();
 
+    account_management a;
+
+    settingsWindow settings;
+    settings.setGuest(guestAcc);
+    settings.setCurrentUser(currentUser);
+    settings.setAccMgmt(&a);
+    settings.setScooterMgmt(scootMgmt);
+
     switch(index)
     {
         // Go to Home window
@@ -514,10 +523,17 @@ void rentScooter::on_comboBox_activated(int index)
             this->close();
             myS.setModal(true);
             myS.exec();
-            //qDebug() << "idk rent";
             break;
 
-        // Go to log in Window
+            // Go to Settings window
+        case 3:
+            this->close();
+
+            settings.setModal(true);
+            settings.exec();
+            break;
+
+            // Go to log in Window
         case 4:
             this->close();
             window.close();

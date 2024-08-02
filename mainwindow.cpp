@@ -198,6 +198,12 @@ void MainWindow::on_pushButton_5_clicked()
     ui->label_3->show();
     ui->label_4->show();
 
+    // Clear contents of text fields
+    ui->lineEdit->clear();
+    ui->lineEdit_2->clear();
+    ui->lineEdit_5->clear();
+    ui->lineEdit_6->clear();
+
     // Hide other labels and edit lines
     ui->lineEdit->hide();
     ui->lineEdit_2->hide();
@@ -301,6 +307,12 @@ void MainWindow::on_pushButton_3_clicked()
 
         if(query.exec())
         {
+            // Clear contents of text fields
+            ui->lineEdit->clear();
+            ui->lineEdit_2->clear();
+            ui->lineEdit_5->clear();
+            ui->lineEdit_6->clear();
+
             // Print message when account is created
             ui->label_8->setText("Account created.");
             ui->label_8->show();
@@ -376,7 +388,11 @@ void MainWindow::on_pushButton_4_clicked()
         {
             if(query.next())
             {
-                //ui->label_8->hide();
+                // Clear contents of text fields
+                ui->lineEdit->clear();
+                ui->lineEdit_2->clear();
+                ui->lineEdit_5->clear();
+                ui->lineEdit_6->clear();
 
                 ui->label_8->setText("Valid username/password");
                 ui->label_8->show();
