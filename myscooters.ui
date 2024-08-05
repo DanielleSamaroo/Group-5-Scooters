@@ -16,14 +16,17 @@
   <widget class="QLabel" name="label_31">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>180</x>
      <y>270</y>
-     <width>450</width>
-     <height>16</height>
+     <width>551</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>LInvalid Username or Password</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QFrame" name="frame">
@@ -136,22 +139,25 @@
   <widget class="QLabel" name="label_30">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>225</y>
-     <width>450</width>
-     <height>16</height>
+     <x>180</x>
+     <y>220</y>
+     <width>551</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>LInvalid Username or Password</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
   </widget>
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>0</x>
      <y>510</y>
-     <width>461</width>
+     <width>761</width>
      <height>20</height>
     </rect>
    </property>
@@ -165,6 +171,9 @@
    </property>
    <property name="text">
     <string>Scooter rented, go to My Scooters to see your details</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="label_7">
@@ -183,7 +192,7 @@
   <widget class="QWidget" name="verticalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>120</x>
      <y>200</y>
      <width>31</width>
      <height>241</height>
@@ -290,23 +299,26 @@
   <widget class="QLabel" name="label_34">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>410</y>
-     <width>450</width>
-     <height>16</height>
+     <x>180</x>
+     <y>400</y>
+     <width>551</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>LInvalid Username or Password</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
   </widget>
   <widget class="QLabel" name="label_9">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>180</y>
-     <width>341</width>
-     <height>20</height>
+     <x>0</x>
+     <y>160</y>
+     <width>761</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
@@ -319,6 +331,9 @@
    </property>
    <property name="text">
     <string>Select a scooter to return:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox_2">
@@ -337,33 +352,39 @@
   <widget class="QLabel" name="label_32">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>180</x>
      <y>320</y>
-     <width>450</width>
-     <height>16</height>
+     <width>551</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>LInvalid Username or Password</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="label_33">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>180</x>
      <y>360</y>
-     <width>450</width>
-     <height>16</height>
+     <width>551</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
     <string>LInvalid Username or Password</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>150</x>
      <y>200</y>
      <width>21</width>
      <height>251</height>
