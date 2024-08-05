@@ -5,27 +5,46 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 SOURCES += \
-    account_management.cpp \
+    accountmanagement.cpp \
+    adddeletescooter.cpp \
+    changedata.cpp \
+    deleteuser.cpp \
+    employee_manager.cpp \
     main.cpp \
     mainwindow.cpp \
     myscooters.cpp \
+    promoteaccount.cpp \
     rentscooter.cpp \
     scooter_management.cpp \
+    scooterrequests.cpp \
     settingswindow.cpp
 
 HEADERS += \
-    account_management.h \
+    accountmanagement.h \
+    adddeletescooter.h \
+    changedata.h \
+    deleteuser.h \
+    employee_manager.h \
     mainwindow.h \
     myscooters.h \
+    promoteaccount.h \
     rentscooter.h \
     scooter_management.h \
+    scooterrequests.h \
     settingswindow.h
 
 FORMS += \
+    accountmanagement.ui \
+    adddeletescooter.ui \
+    changedata.ui \
+    deleteuser.ui \
+    employee_manager.ui \
     mainwindow.ui \
     myscooters.ui \
+    promoteaccount.ui \
     rentscooter.ui \
     scooter_management.ui \
+    scooterrequests.ui \
     settingswindow.ui
 
 # Default rules for deployment.
