@@ -1,8 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "scooter_management.h"
-#include "account_management.h"
+#include "accountmanagement.h"
 #include <QPixmap>
+#include "employee_manager.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,8 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->resize(400,500);
 
-    //QPixmap pix("/Users/juanpostiglione/Downloads/scooter.png");
-    QPixmap pix("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
+    QPixmap pix("/Users/juanpostiglione/Downloads/scooter.png");
+    //QPixmap pix("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
     ui->label_4->setPixmap(pix);
 
     // Set Window Color
@@ -70,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Initially set Label Position
     labelPosition();
 
-    account_management accs;
+    accountmanagement accs;
 }
 
 
@@ -124,7 +125,7 @@ void MainWindow::labelPosition()
     ui->label_5->move(centerX-180, centerY +20);
     ui->label_6->move(centerX-190,centerY - 98.5);
     ui->label_7->move(centerX-190,centerY - 48.5);
-    ui->label_8->move(centerX-180, centerY + 2.5);
+    ui->label_8->move(centerX-150, centerY + 2.5);
 }
 
 // Set the Line Text Position
@@ -261,8 +262,8 @@ void MainWindow::on_pushButton_3_clicked()
 {
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    //mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
     mydb.open();
 
     if (!mydb.open())
@@ -349,8 +350,8 @@ void MainWindow::on_pushButton_4_clicked()
 
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    //mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
     mydb.open();
 
 
@@ -363,7 +364,6 @@ void MainWindow::on_pushButton_4_clicked()
     // Strings for username and password
     QString username = ui->lineEdit->text();
     QString password = ui->lineEdit_2->text();
-    QString status = "customer"; //"customer", "employee", or "administrator". Default status is "customer".
 
     //Check if username/password fields are empty
     bool fieldFilled = true;
@@ -384,6 +384,8 @@ void MainWindow::on_pushButton_4_clicked()
         query.bindValue(":username", username);
         query.bindValue(":password", password);
 
+
+
         if(query.exec())
         {
             if(query.next())
@@ -396,15 +398,38 @@ void MainWindow::on_pushButton_4_clicked()
 
                 ui->label_8->setText("Valid username/password");
                 ui->label_8->show();
-                scooter_management s;
-                s.setGuest(false);
-                scooter_management* sPoint = &s;
-                s.setCurrent(sPoint);
-                s.setCurrentUser(username);
 
-                s.setModal(true);
-                this->close();
-                s.exec();
+                QString status = query.value("status").toString();
+
+                if(status =="customer")
+                {
+                    scooter_management s;
+                    s.setGuest(false);
+                    scooter_management* sPoint = &s;
+                    s.setCurrent(sPoint);
+                    s.setCurrentUser(username);
+
+                    s.setModal(true);
+                    this->close();
+                    s.exec();
+                }
+
+                if(status == "administrator")
+                {
+                    employee_manager e;
+                    e.setModal(true);
+                    this->close();
+                    e.exec();
+                }
+
+                if(status == "employee")
+                {
+                    employee_manager e;
+                    e.setModal(true);
+                    this->close();
+                    e.exec();
+                }
+
             }
             else
             {
@@ -430,8 +455,8 @@ void MainWindow::on_pushButton_6_clicked()
 
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    //mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
     mydb.open();
 
     // When the databse is opened
@@ -447,6 +472,7 @@ void MainWindow::on_pushButton_6_clicked()
     s.setModal(true);
     this->close();
     s.exec();
+
 }
 
 
