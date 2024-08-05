@@ -1,14 +1,21 @@
-#ifndef ACCOUNT_MANAGEMENT_H
-#define ACCOUNT_MANAGEMENT_H
+#ifndef ACCOUNTMANAGEMENT_H
+#define ACCOUNTMANAGEMENT_H
 
+#include <QDialog>
 #include <QtSql>
 #include <QDebug>
 
-class account_management
+namespace Ui {
+class accountmanagement;
+}
+
+class accountmanagement : public QDialog
 {
+    Q_OBJECT
+
 public:
-    account_management(); // Initializes the database connection and ensures the table exists.
-    ~account_management(); // Closes the database connection.
+    explicit accountmanagement(QWidget *parent = nullptr);
+    ~accountmanagement();
 
     // Creates a new account with the given username, password, and status.
     bool createAccount(const QString& username, const QString& password, const QString& status);
@@ -28,7 +35,21 @@ public:
     // Retrieves all accounts from the database and returns them as a list of QVariantMap.
     QList<QVariantMap> getAllAccounts();
 
+
+private slots:
+    void on_pushButton_2_clicked();
+
+    void on_toolButton_clicked();
+
+    void on_comboBox_3_currentIndexChanged(int index);
+
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_clicked();
+
 private:
+    Ui::accountmanagement *ui;
+
     QSqlDatabase db; // Database connection object.
 
     QString pwdKey = "HI0qnP4YuI1WttiUie0e"; // Key used for password encryption and decryption
@@ -40,4 +61,5 @@ private:
     QString decryptPassword(QString pwdStr);
 };
 
-#endif // ACCOUNT_MANAGEMENT_H
+#endif // ACCOUNTMANAGEMENT_H
+
