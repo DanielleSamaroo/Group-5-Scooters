@@ -32,9 +32,9 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>50</y>
+      <y>40</y>
       <width>421</width>
-      <height>31</height>
+      <height>50</height>
      </rect>
     </property>
     <property name="font">
@@ -137,7 +137,7 @@
     </item>
     <item>
      <property name="text">
-      <string>Request Rentals</string>
+      <string>Rental Requests</string>
      </property>
     </item>
     <item>
@@ -198,7 +198,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Select an option</string>
+    <string>Select an Option:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

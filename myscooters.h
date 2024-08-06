@@ -45,6 +45,9 @@ public:
     // Display updated My Scooter info
     void updateDisplay();
 
+    QString filePath;
+    void setFilePath(QString otherPath);
+
 private slots:
 
     void on_toolButton_2_clicked();

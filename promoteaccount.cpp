@@ -12,11 +12,9 @@ promoteaccount::promoteaccount(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->buttonBox->hide();
-
     // Set image and window style and buttons
 
-    QPixmap image("/Users/juanpostiglione/Downloads/scooter.png");
+    QPixmap image(filePath + "/scooter.png");
     ui->label_5->setPixmap(image);
     ui->comboBox->hide();
 
@@ -25,10 +23,18 @@ promoteaccount::promoteaccount(QWidget *parent)
 
     this->setStyleSheet("background-color: rgb(1, 68, 3);");
 
+    ui->label_4->setStyleSheet("QLabel { color : rgb(255, 165, 0); }");
     ui->frame->setStyleSheet("QFrame {" "background-color: black;" "}");
 
     ui->buttonBox->setStyleSheet("QPushButton{" "color: white;" "background-color: grey;"
                                  "}" "QPushButton:hover {" "background-color: orange;""}");
+
+    // Make labels white
+    ui->label->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_2->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_3->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_6->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_7->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
 }
 
 
@@ -39,9 +45,7 @@ promoteaccount::~promoteaccount()
 
 // When click Accept, promoteAccount function works with the UI
 void promoteaccount::on_buttonBox_accepted()
-{
-    ui->buttonBox->hide();
-
+{    
     accountmanagement acc;
     QString username = ui->lineEdit->text();
     QString newStatus = ui->lineEdit_2->text();
@@ -50,7 +54,6 @@ void promoteaccount::on_buttonBox_accepted()
     {
         ui->label_3->setText("Please fill in all fields.");
     }
-
     else
     {
         if(acc.promoteAccount(username, newStatus))
@@ -63,19 +66,26 @@ void promoteaccount::on_buttonBox_accepted()
             ui->label_3->setText("Failed Promotion, username does not exist.");
         }
     }
-
+    ui->label_3->show();
 }
 
 // When Cancel button is pressed
 void promoteaccount::on_buttonBox_rejected()
 {
-    ui->buttonBox->hide();
+    ui->lineEdit->clear();
+    ui->lineEdit_2->clear();
 }
 
 // When write in line edit, accept and cancel button shows up
-void promoteaccount::on_lineEdit_editingFinished()
+void promoteaccount::on_lineEdit_textChanged()
 {
-    ui->buttonBox->show();
+    ui->label_3->hide();
+}
+
+// When write in line edit, accept and cancel button shows up
+void promoteaccount::on_lineEdit_2_textChanged()
+{
+    ui->label_3->hide();
 }
 
 
@@ -94,6 +104,17 @@ void promoteaccount::on_comboBox_currentIndexChanged(int index)
     promoteaccount prom;
     deleteUser user;
 
+    acc.accRank = accRank;
+    em.accRank = accRank;
+    data.accRank = accRank;
+    prom.accRank = accRank;
+    user.accRank = accRank;
+
+    acc.setFilePath(filePath);
+    em.setFilePath(filePath);
+    data.setFilePath(filePath);
+    prom.setFilePath(filePath);
+    user.setFilePath(filePath);
 
     switch(index)
     {
@@ -124,4 +145,12 @@ void promoteaccount::on_comboBox_currentIndexChanged(int index)
         data.exec();
         break;
     }
+}
+
+
+void promoteaccount::setFilePath(QString otherPath)
+{
+    filePath = otherPath;
+    QPixmap image(filePath + "/scooter.png");
+    ui->label_5->setPixmap(image);
 }

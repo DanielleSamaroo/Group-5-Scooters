@@ -3,6 +3,10 @@
 #include "scooter_management.h"
 #include "accountmanagement.h"
 #include <QPixmap>
+#include <vector>
+#include <iostream>
+#include <string>
+#include "windows.h"
 #include "employee_manager.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -13,8 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->resize(400,500);
 
-    QPixmap pix("/Users/juanpostiglione/Downloads/scooter.png");
-    //QPixmap pix("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
+    QPixmap pix(filePath + "/scooter.png");
     ui->label_4->setPixmap(pix);
 
     // Set Window Color
@@ -61,6 +64,18 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_6->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
                                     "}" "QPushButton:hover {" "background-color: orange;""}");
 
+    // Set labels to white
+    ui->label->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_2->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_5->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_6->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_7->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_8->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+
+    // Get Width and Height for Buttons
+    int titleWidth = ui->label_3->width();
+    int centerX = (windowWidth - titleWidth) / 2;
+    ui->label_3->move(centerX-10, 500);
 
     // Initially set Button Position
     buttonPosition();
@@ -70,6 +85,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Initially set Label Position
     labelPosition();
+
+
+    ui->lineEdit->setStyleSheet("QLabel { color : white; }");
+    ui->lineEdit_2->setStyleSheet("QLabel { color : white; }");
+    ui->lineEdit_5->setStyleSheet("QLabel { color : white; }");
+    ui->lineEdit_6->setStyleSheet("QLabel { color : white; }");
 
     accountmanagement accs;
 }
@@ -120,7 +141,7 @@ void MainWindow::labelPosition()
     // Labels Position
     ui->label->move(centerX-180, centerY-98.5);
     ui->label_2->move(centerX-180,centerY-48.5);
-    ui->label_3->move(centerX-195,centerY-150);
+    ui->label_3->move(centerX-293,centerY-150);
     ui->label_4->move(centerX -125, centerY - 50);
     ui->label_5->move(centerX-180, centerY +20);
     ui->label_6->move(centerX-190,centerY - 98.5);
@@ -262,8 +283,8 @@ void MainWindow::on_pushButton_3_clicked()
 {
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    //mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
+    mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
     mydb.open();
 
     if (!mydb.open())
@@ -350,9 +371,9 @@ void MainWindow::on_pushButton_4_clicked()
 
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    mydb.setDatabaseName(filePath + "/database_q.db");
     mydb.open();
+    qDebug() << filePath;
 
 
     // When the databse is opened
@@ -408,23 +429,26 @@ void MainWindow::on_pushButton_4_clicked()
                     scooter_management* sPoint = &s;
                     s.setCurrent(sPoint);
                     s.setCurrentUser(username);
+                    s.setFilePath(filePath);
 
                     s.setModal(true);
                     this->close();
                     s.exec();
                 }
-
-                if(status == "administrator")
+                else if(status == "administrator")
                 {
                     employee_manager e;
+                    e.accRank = status;
+                    e.setFilePath(filePath);
                     e.setModal(true);
                     this->close();
                     e.exec();
                 }
-
-                if(status == "employee")
+                else if(status == "employee")
                 {
                     employee_manager e;
+                    e.accRank = status;
+                    e.setFilePath(filePath);
                     e.setModal(true);
                     this->close();
                     e.exec();
@@ -455,8 +479,7 @@ void MainWindow::on_pushButton_6_clicked()
 
     // Set Database
     QSqlDatabase mydb = QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    //mydb.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
+    mydb.setDatabaseName(filePath + "/database_q.db");
     mydb.open();
 
     // When the databse is opened
@@ -469,6 +492,7 @@ void MainWindow::on_pushButton_6_clicked()
     s.setGuest(true);
     scooter_management* sPoint = &s;
     s.setCurrent(sPoint);
+    s.setFilePath(filePath);
     s.setModal(true);
     this->close();
     s.exec();

@@ -3,6 +3,14 @@
 #include "scooter_management.h"
 #include "accountmanagement.h"
 #include "employee_manager.h"
+#include "mainwindow.h"
+#include "myscooters.h"
+#include "settingswindow.h"
+#include "adddeletescooter.h"
+#include <QSqlQuery>
+#include <QPixmap>
+#include <QtSql>
+
 
 scooterRequests::scooterRequests(QWidget *parent)
     : QDialog(parent)
@@ -21,13 +29,14 @@ scooterRequests::scooterRequests(QWidget *parent)
     ui->label_7->hide();
     ui->label_8->hide();
 
-    QPixmap image("/Users/juanpostiglione/Downloads/scooter.png");
+    QPixmap image(filePath + "/scooter.png");
     ui->label->setPixmap(image);
 
-    ui->comboBox_3->hide();
+    ui->comboBox_13->hide();
 
     this->setStyleSheet("background-color: rgb(1, 68, 3);");
 
+    ui->label_2->setStyleSheet("QLabel { color : rgb(255, 165, 0); }");
     ui->frame->setStyleSheet("QFrame {" "background-color: black;" "}");
 
     ui->buttonBox->setStyleSheet("QPushButton{" "color: white;" "background-color: grey;"
@@ -46,6 +55,13 @@ scooterRequests::scooterRequests(QWidget *parent)
     ui->pushButton_2->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;" "border-radius: 3px;" "padding: 3px;"
                                     "}" "QPushButton:hover {" "background-color: orange;""}");
 
+    // Make labels white
+    ui->label_3->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_4->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_5->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_6->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_7->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_8->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
 }
 
 scooterRequests::~scooterRequests()
@@ -79,6 +95,8 @@ void scooterRequests::on_buttonBox_accepted()
     bool done;
     int scooterID = ui->lineEdit_2->text().toInt(&done);
 
+    //qDebug() << scooterID << "  " << username;
+
     if(username.isEmpty() || !done)
     {
         ui->label_3->setText("Missing Fields.");
@@ -88,17 +106,16 @@ void scooterRequests::on_buttonBox_accepted()
     {
         if(scooter.approveRental(scooterID, username))
         {
-            ui->label_3->setText("Rental Aproved.");
+            ui->label_3->setText("Rental approved.");
         }
-
         else
         {
-            ui->label_3->setText("Rental Aprove failed, username or ID were not found.");
+            ui->label_3->setText("Rental approve failed, username or ID were not found.");
         }
     }
 }
 
-// When accpet button is pressed, rejectRental function works with the UI
+// When reject button is pressed, rejectRental function works with the UI
 void scooterRequests::on_buttonBox_2_accepted()
 {
     scooter_management scooter;
@@ -114,17 +131,17 @@ void scooterRequests::on_buttonBox_2_accepted()
     {
         if(scooter.rejectRental(scooterID))
         {
-            ui->label_3->setText("Rental Rejected successfully.");
+            ui->label_3->setText("Rental rejected successfully.");
         }
 
         else
         {
-            ui->label_3->setText("Rental Reject failed.");
+            ui->label_3->setText("Rental reject failed.");
         }
     }
 }
 
-// When cancel button fro approval is pressed, line contents clear
+// When cancel button for approval is pressed, line contents clear
 void scooterRequests::on_buttonBox_rejected()
 {
     ui->lineEdit->clear();
@@ -147,31 +164,120 @@ void scooterRequests::on_buttonBox_2_rejected()
 // When menu button is pressed, menu bar shows up
 void scooterRequests::on_toolButton_clicked()
 {
-    ui->comboBox_3->show();
+    ui->comboBox_13->show();
 }
 
 // Change windows from menu bar
-void scooterRequests::on_comboBox_3_currentIndexChanged(int index)
+void scooterRequests::on_comboBox_13_activated(int index)
 {
+
+    ui->comboBox_13->hide();
+    MainWindow* mainWindow = new MainWindow(nullptr);
+
     accountmanagement acc;
     scooterRequests scooter;
     employee_manager em;
+    addDeleteScooter sc;
 
-    switch(index)
+    acc.accRank = accRank;
+    scooter.accRank = accRank;
+    em.accRank = accRank;
+    sc.accRank = accRank;
+
+    acc.setFilePath(filePath);
+    scooter.setFilePath(filePath);
+    em.setFilePath(filePath);
+    sc.setFilePath(filePath);
+
+    if(accRank == "administrator")
     {
-    case 1: // Employe manager window opens
-        this->close();
-        acc.close();
-        em.setModal(true);
-        em.exec();
-        break;
+        switch(index)
+        {
+            case 1: // Employee manager window opens
+                this->close();
+                acc.close();
+                em.setModal(true);
+                em.exec();
+                break;
 
-    case 2: // Account management window opens
-        this->close();
-        em.close();
-        acc.setModal(true);
-        acc.exec();
-        break;
+            case 2: // Account management window opens
+                this->close();
+                em.close();
+                acc.setModal(true);
+                acc.exec();
+                break;
+
+            case 3: // Add/delete/update scooter window opens
+                this->close();
+                em.close();
+                acc.close();
+                scooter.close();
+                sc.setModal(true);
+                sc.exec();
+                break;
+
+            case 4: // Log Out
+                this->close();
+                acc.close();
+                em.close();
+                scooter.close();
+
+                mainWindow->show();
+                mainWindow->resize(400,500);
+        }
+    }
+    else
+    {
+        switch(index)
+        {
+            case 1: // Employee manager window opens
+                this->close();
+                acc.close();
+                em.setModal(true);
+                em.exec();
+                break;
+
+            case 2: // Add/delete/update scooter window opens
+                this->close();
+                em.close();
+                sc.setModal(true);
+                sc.exec();
+                break;
+
+            case 3: // Log Out
+                this->close();
+                acc.close();
+                em.close();
+                scooter.close();
+
+                mainWindow->show();
+                mainWindow->resize(400,500);
+        }
     }
 }
 
+void scooterRequests::setFilePath(QString otherPath)
+{
+    filePath = otherPath;
+    QPixmap image(filePath + "/scooter.png");
+    ui->label->setPixmap(image);
+
+
+    ui->comboBox_13->clear();
+    QStringList list;
+
+
+    if(accRank == "employee")
+    {
+        list = { "Rental Requests", "Home", "Add/Delete/Update a Scooter", "Log Out" };
+        ui->comboBox_13->addItems(list);
+    }
+    else if(accRank == "administrator")
+    {
+        list = { "Rental Requests", "Home", "Account Management", "Add/Delete/Update a Scooter", "Log Out" };
+        ui->comboBox_13->addItems(list);
+    }
+
+    //ui->comboBox_13->show();
+
+}

@@ -35,6 +35,11 @@ public:
     // Retrieves all accounts from the database and returns them as a list of QVariantMap.
     QList<QVariantMap> getAllAccounts();
 
+    QString filePath;
+    void setFilePath(QString otherPath);
+
+    // 'employee' or 'administrator'
+    QString accRank;
 
 private slots:
     void on_pushButton_2_clicked();

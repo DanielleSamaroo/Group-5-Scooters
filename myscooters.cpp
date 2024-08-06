@@ -23,8 +23,7 @@ myscooters::myscooters(QWidget *parent)
     ui->label_6->hide();
 
     // Set Scooter Image
-    //QPixmap image("/Users/juanpostiglione/Downloads/scooter.png");
-    QPixmap image("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
+    QPixmap image(filePath + "/scooter.png");
     ui->label_5->setPixmap(image);
 
     // Use images as emojis for check boxes
@@ -55,15 +54,15 @@ myscooters::myscooters(QWidget *parent)
     // Check the Index Menu
     ui->comboBox_2->setCurrentIndex(2);
 
-    // Set Database
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    //db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
-
-    if (!db.open()) {
-        qDebug() << "Error: Could not open database." << db.lastError();
-        return; // Exit the function if the database cannot be opened
-    }
+    // Make labels white
+    ui->label_6->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_7->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_9->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_30->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_31->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_32->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_33->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_34->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
 }
 
 myscooters::~myscooters()
@@ -132,6 +131,7 @@ void myscooters::returnUnit(int scootID)
     bool found = false;
     int currentUnits = 0;
     QString lotName;
+    int distance = 0;
     
     if(!guestAcc)
     {
@@ -143,6 +143,7 @@ void myscooters::returnUnit(int scootID)
             if(scooters[i].value("scooter_id").toString().toInt() == scootID)
             {
                 lotName = scooters[i].value("nearest_lot").toString();
+                distance = scooters[i].value("lot_distance").toString().toInt();
                 found = true;
                 break;
             }
@@ -161,7 +162,7 @@ void myscooters::returnUnit(int scootID)
             currentUnits++; // Add current scooter to number of available scooters
 
             // Set scooter to be available for rentals
-            if(scootMgmt->updateScooter(scootID, "Yes", lotName, 0, 4, "", "Available"))
+            if(scootMgmt->updateScooter(scootID, "Yes", lotName, distance, 4, "", "Available"))
             {
                 // Update the database and change lot availability
                 QSqlQuery query;
@@ -173,7 +174,7 @@ void myscooters::returnUnit(int scootID)
                 if (query.exec())
                 {
                     qDebug() << "Units updated successfully for location:" << lotName;
-                    ui->label_6->setText("Scooter successfully returned");
+                    ui->label_6->setText("Scooter successfully returned!");
                 }
                 else
                 {
@@ -230,7 +231,7 @@ void myscooters::updateDisplay()
     //Display scooter info if user is logged in
     if(!guestAcc)
     {
-        ui->label_9->setText("Select a scooter to return:");
+        ui->label_9->setText("Select a Scooter to Return:");
         ui->label_9->show();
 
         for(int i = 0; i < scooters.size(); i++)
@@ -247,10 +248,11 @@ void myscooters::updateDisplay()
                     QString nearLot = scooters[i].value("nearest_lot").toString();
                     QString lotDistance = scooters[i].value("lot_distance").toString();
                     QString rentRate = scooters[i].value("rental_rate").toString();
+                    QString sStatus = scooters[i].value("status").toString();
                     
                     text30 = ID;
                     QString text = "ID: " + ID + " | Closest Lot: " + nearLot + " | Distance from Lot: "
-                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour";
+                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour | " + sStatus;
 
                     // Display data
                     ui->label_14->show();
@@ -267,10 +269,11 @@ void myscooters::updateDisplay()
                     QString nearLot = scooters[i].value("nearest_lot").toString();
                     QString lotDistance = scooters[i].value("lot_distance").toString();
                     QString rentRate = scooters[i].value("rental_rate").toString();
+                    QString sStatus = scooters[i].value("status").toString();
 
                     text31 = ID;
                     QString text = "ID: " + ID + " | Closest Lot: " + nearLot + " | Distance from Lot: "
-                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour";
+                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour | " + sStatus;
 
                     // Display data
                     ui->label_15->show();
@@ -286,10 +289,11 @@ void myscooters::updateDisplay()
                     QString nearLot = scooters[i].value("nearest_lot").toString();
                     QString lotDistance = scooters[i].value("lot_distance").toString();
                     QString rentRate = scooters[i].value("rental_rate").toString();
+                    QString sStatus = scooters[i].value("status").toString();
                     
                     text32 = ID;
                     QString text = "ID: " + ID + " | Closest Lot: " + nearLot + " | Distance from Lot: "
-                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour";
+                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour | " + sStatus;
 
                     // Display data
                     ui->label_16->show();
@@ -305,10 +309,11 @@ void myscooters::updateDisplay()
                     QString nearLot = scooters[i].value("nearest_lot").toString();
                     QString lotDistance = scooters[i].value("lot_distance").toString();
                     QString rentRate = scooters[i].value("rental_rate").toString();
+                    QString sStatus = scooters[i].value("status").toString();
 
                     text33 = ID;
                     QString text = "ID: " + ID + " | Closest Lot: " + nearLot + " | Distance from Lot: "
-                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour";
+                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour | " + sStatus;
 
                     // Display data
                     ui->label_17->show();
@@ -324,10 +329,11 @@ void myscooters::updateDisplay()
                     QString nearLot = scooters[i].value("nearest_lot").toString();
                     QString lotDistance = scooters[i].value("lot_distance").toString();
                     QString rentRate = scooters[i].value("rental_rate").toString();
+                    QString sStatus = scooters[i].value("status").toString();
 
                     text34 = ID;
                     QString text = "ID: " + ID + " | Closest Lot: " + nearLot + " | Distance from Lot: "
-                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour";
+                                   + lotDistance + " miles | Rental Rate: $" + rentRate + " per hour | " + sStatus;
 
                     // Display data
                     ui->label_18->show();
@@ -340,7 +346,7 @@ void myscooters::updateDisplay()
     }
     else
     {
-        ui->label_9->setText("Sign in to view your scooters");
+        ui->label_9->setText("Sign in to View your Scooters");
         ui->label_9->show();
     }
 
@@ -364,24 +370,32 @@ void myscooters::on_comboBox_2_activated(int index)
     ui->comboBox_2->hide();
     scooter_management window;
     mainWindow = new MainWindow(nullptr);
+    window.setCurrentUser(currentUser);
+    window.setCurrent(scootMgmt);
+    window.setGuest(guestAcc);
+    window.setFilePath(filePath);
 
     rentScooter rentS;
     rentS.setGuest(guestAcc);
     rentS.setScooterMgmt(scootMgmt);
     rentS.setCurrentUser(currentUser);
+    rentS.setFilePath(filePath);
 
     myscooters myS;
     myS.setGuest(guestAcc);
     myS.setScooterMgmt(scootMgmt);
     myS.setCurrentUser(currentUser);
+    myS.setFilePath(filePath);
 
-    account_management a;
+    accountmanagement a;
+    a.setFilePath(filePath);
 
     settingsWindow settings;
     settings.setGuest(guestAcc);
     settings.setCurrentUser(currentUser);
     settings.setAccMgmt(&a);
     settings.setScooterMgmt(scootMgmt);
+    settings.setFilePath(filePath);
 
     switch(index)
     {
@@ -586,4 +600,21 @@ void myscooters::on_buttonBox_2_accepted()
 
     // Show message after rent
     ui->label_6->show();
+}
+
+
+void myscooters::setFilePath(QString otherPath)
+{
+    filePath = otherPath;
+    QPixmap image(filePath + "/scooter.png");
+    ui->label_5->setPixmap(image);
+
+    // Set Database
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(filePath + "/database_q.db");
+
+    if (!db.open()) {
+        qDebug() << "Error: Could not open database." << db.lastError();
+        return; // Exit the function if the database cannot be opened
+    }
 }

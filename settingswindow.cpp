@@ -3,7 +3,7 @@
 #include "scooter_management.h"
 #include "rentscooter.h"
 #include "myscooters.h"
-#include "account_management.h"
+#include "accountmanagement.h"
 #include <QMainWindow>
 #include <QtSql>
 #include <QDebug>
@@ -22,8 +22,7 @@ settingsWindow::settingsWindow(QWidget *parent)
     // Hide index Menu
     ui->comboBox_2->hide();
 
-    //QPixmap pix("/Users/juanpostiglione/Downloads/scooter.png");
-    QPixmap pix("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
+    QPixmap pix(filePath + "/scooter.png");
     ui->label_8->setPixmap(pix);
 
     // Set Window Color
@@ -49,18 +48,15 @@ settingsWindow::settingsWindow(QWidget *parent)
     // Check the Index Menu
     ui->comboBox_2->setCurrentIndex(3);
 
-    // Set Database
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    //db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
-
-    if (!db.open()) {
-        qDebug() << "Error: Could not open database." << db.lastError();
-        return; // Exit the function if the database cannot be opened
-    }
-
     // Initially set Label Position
     labelPosition();
+
+    // Make labels white
+    ui->label_3->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_5->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_6->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_9->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_10->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
 }
 
 settingsWindow::~settingsWindow()
@@ -102,7 +98,7 @@ void settingsWindow::setCurrentUser(QString& userN)
 }
 
 // Method to set account_management pointer
-void settingsWindow::setAccMgmt(account_management* a)
+void settingsWindow::setAccMgmt(accountmanagement* a)
 {
     accMgmt = a;
 }
@@ -214,11 +210,14 @@ void settingsWindow::on_comboBox_2_activated(int index)
     scooter_management window;
     ui->comboBox_2->hide();
     mainWindow = new MainWindow(nullptr);
+    window.setCurrentUser(currentUser);
+    window.setFilePath(filePath);
 
     rentScooter rentS;
     rentS.setGuest(guestAcc);
     rentS.setScooterMgmt(scootMgmt);
     rentS.setCurrentUser(currentUser);
+    rentS.setFilePath(filePath);
 
     myscooters myS;
     myS.setGuest(guestAcc);
@@ -226,6 +225,7 @@ void settingsWindow::on_comboBox_2_activated(int index)
     myS.setRScooter(&rentS);
     myS.setCurrentUser(currentUser);
     myS.updateDisplay();
+    myS.setFilePath(filePath);
 
     // Clear text fields
     ui->lineEdit_5->clear();
@@ -262,5 +262,21 @@ void settingsWindow::on_comboBox_2_activated(int index)
             mainWindow->show();
             mainWindow->resize(400,500);
             break;
+    }
+}
+
+void settingsWindow::setFilePath(QString otherPath)
+{
+    filePath = otherPath;
+    QPixmap pix(filePath + "/scooter.png");
+    ui->label_8->setPixmap(pix);
+
+    // Set Database
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(filePath + "/database_q.db");
+
+    if (!db.open()) {
+        qDebug() << "Error: Could not open database." << db.lastError();
+        return; // Exit the function if the database cannot be opened
     }
 }

@@ -24,8 +24,7 @@ rentScooter::rentScooter(QWidget *parent)
     ui->label_6->hide();
 
     // Set Scooter Image
-    //QPixmap image("/Users/juanpostiglione/Downloads/scooter.png");
-    QPixmap image("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
+    QPixmap image(filePath + "/scooter.png");
     ui->label->setPixmap(image);
 
     // Use images as emojis for check boxes
@@ -55,187 +54,15 @@ rentScooter::rentScooter(QWidget *parent)
     // Check the Index Menu
     ui->comboBox->setCurrentIndex(1);
 
-    // Set Database
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    //db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
-
-    if (!db.open()) {
-        qDebug() << "Error: Could not open database." << db.lastError();
-        return; // Exit the function if the database cannot be opened
-    }
-
-
-    scooters = scootMgmt->getAllScooters();
-    int numLotA = 0;
-    int numLotB = 0;
-    int numLotC = 0;
-    int numLotD = 0;
-    int numLotE = 0;
-
-    if(!scooters.empty())
-    {
-        for(int j = 0; j < scooters.size(); j++)
-        {
-            if(scooters[j]["available"] == "Yes" && scooters[j]["lot_distance"] == 0)
-            {
-                if(scooters[j]["nearest_lot"] == "LOT A")
-                {
-                    numLotA++;
-                }
-                else if(scooters[j]["nearest_lot"] == "LOT B")
-                {
-                    numLotB++;
-                }
-                else if(scooters[j]["nearest_lot"] == "LOT C")
-                {
-                    numLotC++;
-                }
-                else if(scooters[j]["nearest_lot"] == "LOT D")
-                {
-                    numLotD++;
-                }
-                else if(scooters[j]["nearest_lot"] == "LOT E")
-                {
-                    numLotE++;
-                }
-            }
-        }
-
-        // Add information from scooterIndex to scooterDetails
-        QSqlQuery q1;
-        q1.prepare("UPDATE scooterDetails SET units = :numA, status = :status WHERE lot_id = :lotA");
-        q1.bindValue(":numA", numLotA);
-        q1.bindValue(":status", "Available");
-        q1.bindValue(":lotA", "UF1");
-
-        QSqlQuery q2;
-        q2.prepare("UPDATE scooterDetails SET units = :numB, status = :status WHERE lot_id = :lotB");
-        q2.bindValue(":numB", numLotB);
-        q2.bindValue(":status", "Available");
-        q2.bindValue(":lotB", "UF2");
-
-        QSqlQuery q3;
-        q3.prepare("UPDATE scooterDetails SET units = :numC, status = :status WHERE lot_id = :lotC");
-        q3.bindValue(":numC", numLotC);
-        q3.bindValue(":status", "Available");
-        q3.bindValue(":lotC", "UF3");
-
-        QSqlQuery q4;
-        q4.prepare("UPDATE scooterDetails SET units = :numD, status = :status WHERE lot_id = :lotD");
-        q4.bindValue(":numD", numLotD);
-        q4.bindValue(":status", "Available");
-        q4.bindValue(":lotD", "UF4");
-
-        QSqlQuery q5;
-        q5.prepare("UPDATE scooterDetails SET units = :numE, status = :status WHERE lot_id = :lotE");
-        q5.bindValue(":numE", numLotE);
-        q5.bindValue(":status", "Available");
-        q5.bindValue(":lotE", "UF5");
-
-        q1.exec();
-        q2.exec();
-        q3.exec();
-        q4.exec();
-        q5.exec();
-
-        q1.finish();
-        q2.finish();
-        q3.finish();
-        q4.finish();
-        q5.finish();
-
-        // Set lot to "Not Available" if no scooters are available at that lot
-        QSqlQuery qAvailable;
-        qAvailable.prepare("UPDATE scooterDetails SET status = :statusBool WHERE units = :numUnits");
-        qAvailable.bindValue(":statusBool", "Not Available");
-        qAvailable.bindValue(":numUnits", 0);
-        qAvailable.exec();
-        qAvailable.finish();
-    }
-
-    updateLots();
-
-    // If the list is not empty
-    if(!lots.empty())
-    {
-        // Access to the first row of scooterDetails
-        QVariantMap firstRow = lots.at(0);
-        QString ID = firstRow.value("lot_id").toString();
-        QString Status = firstRow.value("status").toString();
-        QString Location = firstRow.value("location").toString();
-        QString Units = firstRow.value("units").toString();
-
-        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
-
-        // Show data in check box
-        ui->label_20->setText(text);
-        ui->label_20->show();
-    }
-
-    if(lots.size() > 1)
-    {
-        // Access to the second row of scooterDetails
-        QVariantMap secondRow = lots.at(1);
-        QString ID = secondRow.value("lot_id").toString();
-        QString Status = secondRow.value("status").toString();
-        QString Location = secondRow.value("location").toString();
-        QString Units = secondRow.value("units").toString();
-
-        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
-
-        // Show data in check box
-        ui->label_21->setText(text);
-        ui->label_21->show();
-    }
-
-    if(lots.size() > 2)
-    {
-        // Access to the third row of scooterDetails
-        QVariantMap thirdRow = lots.at(2);
-        QString ID = thirdRow.value("lot_id").toString();
-        QString Status = thirdRow.value("status").toString();
-        QString Location = thirdRow.value("location").toString();
-        QString Units = thirdRow.value("units").toString();
-
-        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
-
-        // Show data in check box
-        ui->label_22->setText(text);
-        ui->label_22->show();
-    }
-
-    if(lots.size() > 3)
-    {
-        // Access to the fourth row of scooterDetails
-        QVariantMap fourthRow = lots.at(3);
-        QString ID = fourthRow.value("lot_id").toString();
-        QString Status = fourthRow.value("status").toString();
-        QString Location = fourthRow.value("location").toString();
-        QString Units = fourthRow.value("units").toString();
-
-        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
-
-        // Show data in check box
-        ui->label_23->setText(text);
-        ui->label_23->show();
-    }
-
-    if(lots.size() > 4)
-    {
-        // Access to the fifth row of scooterDetails
-        QVariantMap fifthRow = lots.at(4);
-        QString ID = fifthRow.value("lot_id").toString();
-        QString Status = fifthRow.value("status").toString();
-        QString Location = fifthRow.value("location").toString();
-        QString Units = fifthRow.value("units").toString();
-
-        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
-
-        // Show data in check box
-        ui->label_24->setText(text);
-        ui->label_24->show();
-    }
+    // Make labels white
+    ui->label_3->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_5->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_6->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_20->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_21->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_22->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_23->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_24->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
 }
 
 rentScooter::~rentScooter()
@@ -488,11 +315,16 @@ void rentScooter::on_comboBox_activated(int index)
     ui->comboBox->hide();
     scooter_management window;
     mainWindow = new MainWindow(nullptr);
+    window.setCurrentUser(currentUser);
+    window.setCurrent(scootMgmt);
+    window.setGuest(guestAcc);
+    window.setFilePath(filePath);
 
     rentScooter rentS;
     rentS.setGuest(guestAcc);
     rentS.setScooterMgmt(scootMgmt);
     rentS.setCurrentUser(currentUser);
+    rentS.setFilePath(filePath);
 
     myscooters myS;
     myS.setGuest(guestAcc);
@@ -500,20 +332,27 @@ void rentScooter::on_comboBox_activated(int index)
     myS.setRScooter(&rentS);
     myS.setCurrentUser(currentUser);
     myS.updateDisplay();
+    myS.setFilePath(filePath);
 
-    account_management a;
+    accountmanagement a;
+    a.setFilePath(filePath);
 
     settingsWindow settings;
     settings.setGuest(guestAcc);
     settings.setCurrentUser(currentUser);
     settings.setAccMgmt(&a);
     settings.setScooterMgmt(scootMgmt);
+    settings.setFilePath(filePath);
 
     switch(index)
     {
         // Go to Home window
         case 0:
             this->close();
+            a.close();
+            settings.close();
+            myS.close();
+            rentS.close();
             window.setModal(true);
             window.exec();
             break;
@@ -521,6 +360,7 @@ void rentScooter::on_comboBox_activated(int index)
             // Go to My Scooters window
         case 2:
             this->close();
+
             myS.setModal(true);
             myS.exec();
             break;
@@ -674,3 +514,191 @@ void rentScooter::on_buttonBox_accepted()
     ui->label_6->show();
 }
 
+
+void rentScooter::setFilePath(QString otherPath)
+{
+    filePath = otherPath;
+    QPixmap image(filePath + "/scooter.png");
+    ui->label->setPixmap(image);
+
+    // Set Database
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(filePath + "/database_q.db");
+
+    if (!db.open()) {
+        qDebug() << "Error: Could not open database." << db.lastError();
+        return; // Exit the function if the database cannot be opened
+    }
+
+
+    scooters = scootMgmt->getAllScooters();
+    int numLotA = 0;
+    int numLotB = 0;
+    int numLotC = 0;
+    int numLotD = 0;
+    int numLotE = 0;
+
+    if(!scooters.empty())
+    {
+        for(int j = 0; j < scooters.size(); j++)
+        {
+            if(scooters[j]["available"] == "Yes" && scooters[j]["lot_distance"] == 0)
+            {
+                if(scooters[j]["nearest_lot"] == "LOT A")
+                {
+                    numLotA++;
+                }
+                else if(scooters[j]["nearest_lot"] == "LOT B")
+                {
+                    numLotB++;
+                }
+                else if(scooters[j]["nearest_lot"] == "LOT C")
+                {
+                    numLotC++;
+                }
+                else if(scooters[j]["nearest_lot"] == "LOT D")
+                {
+                    numLotD++;
+                }
+                else if(scooters[j]["nearest_lot"] == "LOT E")
+                {
+                    numLotE++;
+                }
+            }
+        }
+
+        // Add information from scooterIndex to scooterDetails
+        QSqlQuery q1;
+        q1.prepare("UPDATE scooterDetails SET units = :numA, status = :status WHERE lot_id = :lotA");
+        q1.bindValue(":numA", numLotA);
+        q1.bindValue(":status", "Available");
+        q1.bindValue(":lotA", "UF1");
+
+        QSqlQuery q2;
+        q2.prepare("UPDATE scooterDetails SET units = :numB, status = :status WHERE lot_id = :lotB");
+        q2.bindValue(":numB", numLotB);
+        q2.bindValue(":status", "Available");
+        q2.bindValue(":lotB", "UF2");
+
+        QSqlQuery q3;
+        q3.prepare("UPDATE scooterDetails SET units = :numC, status = :status WHERE lot_id = :lotC");
+        q3.bindValue(":numC", numLotC);
+        q3.bindValue(":status", "Available");
+        q3.bindValue(":lotC", "UF3");
+
+        QSqlQuery q4;
+        q4.prepare("UPDATE scooterDetails SET units = :numD, status = :status WHERE lot_id = :lotD");
+        q4.bindValue(":numD", numLotD);
+        q4.bindValue(":status", "Available");
+        q4.bindValue(":lotD", "UF4");
+
+        QSqlQuery q5;
+        q5.prepare("UPDATE scooterDetails SET units = :numE, status = :status WHERE lot_id = :lotE");
+        q5.bindValue(":numE", numLotE);
+        q5.bindValue(":status", "Available");
+        q5.bindValue(":lotE", "UF5");
+
+        q1.exec();
+        q2.exec();
+        q3.exec();
+        q4.exec();
+        q5.exec();
+
+        q1.finish();
+        q2.finish();
+        q3.finish();
+        q4.finish();
+        q5.finish();
+
+        // Set lot to "Not Available" if no scooters are available at that lot
+        QSqlQuery qAvailable;
+        qAvailable.prepare("UPDATE scooterDetails SET status = :statusBool WHERE units = :numUnits");
+        qAvailable.bindValue(":statusBool", "Not Available");
+        qAvailable.bindValue(":numUnits", 0);
+        qAvailable.exec();
+        qAvailable.finish();
+    }
+
+    updateLots();
+
+    // If the list is not empty
+    if(!lots.empty())
+    {
+        // Access to the first row of scooterDetails
+        QVariantMap firstRow = lots.at(0);
+        QString ID = firstRow.value("lot_id").toString();
+        QString Status = firstRow.value("status").toString();
+        QString Location = firstRow.value("location").toString();
+        QString Units = firstRow.value("units").toString();
+
+        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
+
+        // Show data in check box
+        ui->label_20->setText(text);
+        ui->label_20->show();
+    }
+
+    if(lots.size() > 1)
+    {
+        // Access to the second row of scooterDetails
+        QVariantMap secondRow = lots.at(1);
+        QString ID = secondRow.value("lot_id").toString();
+        QString Status = secondRow.value("status").toString();
+        QString Location = secondRow.value("location").toString();
+        QString Units = secondRow.value("units").toString();
+
+        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
+
+        // Show data in check box
+        ui->label_21->setText(text);
+        ui->label_21->show();
+    }
+
+    if(lots.size() > 2)
+    {
+        // Access to the third row of scooterDetails
+        QVariantMap thirdRow = lots.at(2);
+        QString ID = thirdRow.value("lot_id").toString();
+        QString Status = thirdRow.value("status").toString();
+        QString Location = thirdRow.value("location").toString();
+        QString Units = thirdRow.value("units").toString();
+
+        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
+
+        // Show data in check box
+        ui->label_22->setText(text);
+        ui->label_22->show();
+    }
+
+    if(lots.size() > 3)
+    {
+        // Access to the fourth row of scooterDetails
+        QVariantMap fourthRow = lots.at(3);
+        QString ID = fourthRow.value("lot_id").toString();
+        QString Status = fourthRow.value("status").toString();
+        QString Location = fourthRow.value("location").toString();
+        QString Units = fourthRow.value("units").toString();
+
+        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
+
+        // Show data in check box
+        ui->label_23->setText(text);
+        ui->label_23->show();
+    }
+
+    if(lots.size() > 4)
+    {
+        // Access to the fifth row of scooterDetails
+        QVariantMap fifthRow = lots.at(4);
+        QString ID = fifthRow.value("lot_id").toString();
+        QString Status = fifthRow.value("status").toString();
+        QString Location = fifthRow.value("location").toString();
+        QString Units = fifthRow.value("units").toString();
+
+        QString text = "LOT ID: " + ID + " | Status: " + Status + " | Location: " + Location + " | Units: " + Units;
+
+        // Show data in check box
+        ui->label_24->setText(text);
+        ui->label_24->show();
+    }
+}

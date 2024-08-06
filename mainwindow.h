@@ -69,6 +69,10 @@ private slots:
 
 private:
 
+    //Edit the filePath variable with the file path for your Group-5-Scooters-main folder
+    //Example: filePath = "C:/Users/Bob/Summer_2024/Group-5-Scooters-main";
+    QString filePath = "C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main";
+
     Ui::MainWindow *ui;
     QString pwdKey = "HI0qnP4YuI1WttiUie0e"; // Key used for password encryption and decryption
 

@@ -5,6 +5,7 @@
 #include "changedata.h"
 #include "scooterrequests.h"
 #include "deleteuser.h"
+#include "adddeletescooter.h"
 
 accountmanagement::accountmanagement(QWidget *parent)
     : QDialog(parent)
@@ -17,6 +18,11 @@ accountmanagement::accountmanagement(QWidget *parent)
     // Set style of buttons and window
 
     this->setStyleSheet("background-color: rgb(1, 68, 3);");
+
+    ui->label_2->setStyleSheet("QLabel { color : rgb(255, 165, 0); }");
+
+    ui->label_3->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_5->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
 
     ui->frame->setStyleSheet("QFrame {" "background-color: black;" "}");
 
@@ -31,38 +37,6 @@ accountmanagement::accountmanagement(QWidget *parent)
 
     ui->pushButton_4->setStyleSheet("QPushButton {" "color: white;" "background-color: grey;"  "padding: 3px;"
                                     "}" "QPushButton:hover {" "background-color: orange;""}");
-
-    // Image of scooter to display in the window
-    QPixmap image("/Users/juanpostiglione/Downloads/scooter.png");
-    ui->label->setPixmap(image);
-    ui->comboBox_3->hide();
-
-    // Initialize database
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    // db.setDatabaseName("database_q.db");
-    //db.setDatabaseName("C:/Users/danie/Downloads/Group-5-Scooters-main (3)/Group-5-Scooters-main/database_q.db");
-    //db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
-    db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-
-    // Attempt to open the database
-    if (!db.open()) {
-        qDebug() << "Error: Could not open database.";
-        return;
-    }
-
-    // Create the loginDetails table if it doesn't already exist
-    QSqlQuery query;
-    query.prepare("CREATE TABLE IF NOT EXISTS loginDetails ("
-                  "account_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                  "username TEXT UNIQUE, "
-                  "password TEXT, "
-                  "status TEXT)");
-
-    if(query.exec())
-    {
-        //If there are no accounts, add a new administrator account.
-        createAccount("admin0", "admin0", "administrator");
-    }
 }
 
 accountmanagement::~accountmanagement()
@@ -277,6 +251,9 @@ void accountmanagement::on_pushButton_2_clicked()
 {
     this->close();
     promoteaccount prom;
+    prom.accRank = accRank;
+    prom.setFilePath(filePath);
+
     prom.setModal(true);
     prom.exec();
 }
@@ -297,6 +274,25 @@ void accountmanagement::on_comboBox_3_currentIndexChanged(int index)
     changeData data;
     deleteUser user;
     scooterRequests scooter;
+    addDeleteScooter addD;
+
+    prom.accRank = accRank;
+    em.accRank = accRank;
+    acc.accRank = accRank;
+    data.accRank = accRank;
+    user.accRank = accRank;
+    scooter.accRank = accRank;
+    addD.accRank = accRank;
+
+    prom.setFilePath(filePath);
+    em.setFilePath(filePath);
+    acc.setFilePath(filePath);
+    data.setFilePath(filePath);
+    user.setFilePath(filePath);
+    scooter.setFilePath(filePath);
+    addD.setFilePath(filePath);
+
+    MainWindow* mainWindow = new MainWindow(nullptr);
 
     switch(index)
     {
@@ -305,18 +301,43 @@ void accountmanagement::on_comboBox_3_currentIndexChanged(int index)
         prom.close();
         user.close();
         data.close();
+        delete mainWindow;
         em.setModal(true);
         em.exec();
         break;
 
-    case 3: // Open request scooter window
+    case 2: // Open add/delete/update scooter window
         this->close();
         prom.close();
         user.close();
         data.close();
         em.close();
+        delete mainWindow;
+        addD.setModal(true);
+        addD.exec();
+        break;
+
+
+    case 3: // Open rental requests window
+        this->close();
+        prom.close();
+        user.close();
+        data.close();
+        em.close();
+        delete mainWindow;
         scooter.setModal(true);
         scooter.exec();
+        break;
+
+    case 4: // Log out
+        this->close();
+        prom.close();
+        user.close();
+        data.close();
+        em.close();
+        scooter.close();
+        mainWindow->show();
+        mainWindow->resize(400,500);
         break;
     }
 }
@@ -326,6 +347,9 @@ void accountmanagement::on_pushButton_4_clicked()
 {
     this->close();
     changeData data;
+    data.accRank = accRank;
+    data.setFilePath(filePath);
+
     data.setModal(true);
     data.exec();
 }
@@ -335,8 +359,44 @@ void accountmanagement::on_pushButton_clicked()
 {
     this->close();
     deleteUser user;
+    user.accRank = accRank;
+    user.setFilePath(filePath);
+
     user.setModal(true);
     user.exec();
 }
 
+void accountmanagement::setFilePath(QString otherPath)
+{
+    filePath = otherPath;
 
+    // Image of scooter to display in the window
+    QPixmap image(filePath + "/scooter.png");
+    ui->label->setPixmap(image);
+    ui->comboBox_3->hide();
+
+    // Initialize database
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(filePath + "/database_q.db");
+
+
+    // Attempt to open the database
+    if (!db.open()) {
+        qDebug() << "Error: Could not open database.";
+        return;
+    }
+
+    // Create the loginDetails table if it doesn't already exist
+    QSqlQuery query;
+    query.prepare("CREATE TABLE IF NOT EXISTS loginDetails ("
+                  "account_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                  "username TEXT UNIQUE, "
+                  "password TEXT, "
+                  "status TEXT)");
+
+    if(query.exec())
+    {
+        //If there are no accounts, add a new administrator account.
+        createAccount("admin0", "admin0", "administrator");
+    }
+}

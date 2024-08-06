@@ -18,6 +18,12 @@ public:
     explicit changeData(QWidget *parent = nullptr);
     ~changeData();
 
+    QString filePath;
+    void setFilePath(QString otherPath);
+
+    // 'employee' or 'administrator'
+    QString accRank;
+
 private slots:
     void on_buttonBox_accepted();
 

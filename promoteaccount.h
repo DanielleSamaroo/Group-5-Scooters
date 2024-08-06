@@ -17,13 +17,19 @@ public:
     explicit promoteaccount(QWidget *parent = nullptr);
     ~promoteaccount();
 
+    QString filePath;
+    void setFilePath(QString otherPath);
+
+    // 'employee' or 'administrator'
+    QString accRank;
 
 private slots:
     void on_buttonBox_accepted();
 
     void on_buttonBox_rejected();
 
-    void on_lineEdit_editingFinished();
+    void on_lineEdit_textChanged();
+    void on_lineEdit_2_textChanged();
 
     void on_toolButton_2_clicked();
 

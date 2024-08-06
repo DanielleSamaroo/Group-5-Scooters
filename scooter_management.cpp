@@ -4,9 +4,10 @@
 #include "mainwindow.h"
 #include "rentscooter.h"
 #include "myscooters.h"
-#include "account_management.h"
+#include "accountmanagement.h"
 #include "settingswindow.h"
 #include <QPixmap>
+#include <QAbstractItemView>
 
 scooter_management::scooter_management(QWidget *parent)
     : QDialog(parent),
@@ -38,54 +39,13 @@ scooter_management::scooter_management(QWidget *parent)
 
     ui->frame->setStyleSheet("QFrame {" "background-color: black;}");
 
-     ui->comboBox->setCurrentIndex(0);
+    ui->comboBox->setCurrentIndex(0);
+    //ui->comboBox->setStyleSheet("QComboBox { color: white; }");
 
-    // Initialize the SQLite database connection
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    //db.setDatabaseName("database_q.db"); // Set the database name
-    //db.setDatabaseName("/Users/juanpostiglione/Desktop/Database/database_q.db");
-    db.setDatabaseName("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/database_q.db");
-    //db.setDatabaseName("C:/Users/danie/Downloads/Group-5-Scooters-main (2)/Group-5-Scooters-main/database_q.db");
+    ui->label_3->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_5->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+    ui->label_6->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
 
-
-    //QPixmap picture("/Users/juanpostiglione/Downloads/scooter.png");
-    QPixmap picture("C:/Users/david/Documents/Homework/Summer_2024/Group-5-Scooters-main/scooter.png");
-    //QPixmap picture("C:/Users/danie/Downloads/Group-5-Scooters-main (3)/Group-5-Scooters-main/scooter.png");
-
-    ui->label->setPixmap(picture);
-
-
-    // Check if the database opens successfully
-    if (!db.open()) {
-        qDebug() << "Error: Could not open database."; // Output error message if the database fails to open
-        return;
-    }
-
-
-    // Create a SQL query to create the scooterIndex table if it doesn't exist
-    QSqlQuery query;
-    query.prepare("CREATE TABLE IF NOT EXISTS scooterIndex ("
-               "scooter_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "available TEXT, "
-               "nearest_lot TEXT, "
-               "lot_distance INTEGER, " // Distance to nearest lot in miles
-               "rental_rate INTEGER, " // In dollars (per hour)
-               "renter TEXT, "
-               "status TEXT)");
-    query.exec();
-
-    if(false)
-    {
-        // Add scooters if scooterIndex table is empty
-        for(int i = 0; i < 10; i++)
-        {
-            addScooter("Yes", "LOT A", 0, 4, "", "Available");
-            addScooter("Yes", "LOT B", 0, 4, "", "Available");
-            addScooter("Yes", "LOT C", 0, 4, "", "Available");
-            addScooter("Yes", "LOT D", 0, 4, "", "Available");
-            addScooter("Yes", "LOT E", 0, 4, "", "Available");
-        }
-    }
 }
 
 scooter_management::~scooter_management()
@@ -178,9 +138,10 @@ bool scooter_management::requestRental(int scooterID, const QString& renter)
 // Method to approve a rental request
 bool scooter_management::approveRental(int scooterID, const QString& renter) {
     QSqlQuery query;
-    query.prepare("UPDATE scooterIndex SET available = 'No', renter = :renter, status = 'Rented' WHERE scooter_id = :scooter_id");
+    query.prepare("UPDATE scooterIndex SET available = 'No', renter = :renter, status = 'Rented' WHERE scooter_id = :scooter_id, status = :pending");
     query.bindValue(":renter", renter);
     query.bindValue(":scooter_id", scooterID);
+    query.bindValue(":pending", "Pending");
 
     return query.exec();
 }
@@ -188,8 +149,9 @@ bool scooter_management::approveRental(int scooterID, const QString& renter) {
 // Method to reject a rental request
 bool scooter_management::rejectRental(int scooterID) {
     QSqlQuery query;
-    query.prepare("UPDATE scooterIndex SET available = 'Yes', renter = NULL, status = 'Available' WHERE scooter_id = :scooter_id");
+    query.prepare("UPDATE scooterIndex SET available = 'Yes', renter = NULL, status = 'Available' WHERE scooter_id = :scooter_id, status = :pending");
     query.bindValue(":scooter_id", scooterID);
+    query.bindValue(":pending", "Pending");
 
     return query.exec();
 }
@@ -292,10 +254,12 @@ void scooter_management::on_comboBox_activated(int index)
 {
     ui->comboBox->hide();
     mainWindow = new MainWindow(nullptr);
+
     rentScooter rentS;
     rentS.setGuest(guestAcc);
     rentS.setScooterMgmt(current);
     rentS.setCurrentUser(currentUser);
+    rentS.setFilePath(filePath);
 
     myscooters myS;
     myS.setGuest(guestAcc);
@@ -303,14 +267,17 @@ void scooter_management::on_comboBox_activated(int index)
     myS.setRScooter(&rentS);
     myS.setCurrentUser(currentUser);
     myS.updateDisplay();
+    myS.setFilePath(filePath);
 
-    account_management a;
+    accountmanagement a;
+    a.setFilePath(filePath);
 
     settingsWindow settings;
     settings.setGuest(guestAcc);
     settings.setCurrentUser(currentUser);
     settings.setAccMgmt(&a);
     settings.setScooterMgmt(current);
+    settings.setFilePath(filePath);
 
     // Switch windows from Menu
     switch(index)
@@ -354,13 +321,15 @@ void scooter_management::on_pushButton_clicked()
 {
     // Go to settings window and close current window
     this->close();
-    account_management a;
+    accountmanagement a;
+    a.setFilePath(filePath);
 
     settingsWindow settings;
     settings.setGuest(guestAcc);
     settings.setCurrentUser(currentUser);
     settings.setAccMgmt(&a);
     settings.setScooterMgmt(current);
+    settings.setFilePath(filePath);
     settings.setModal(true);
     settings.exec();
 }
@@ -384,6 +353,7 @@ void scooter_management::on_pushButton_2_clicked()
     rent.setGuest(guestAcc);
     rent.setScooterMgmt(current);
     rent.setCurrentUser(currentUser);
+    rent.setFilePath(filePath);
     rent.setModal(true);
     rent.exec();
 
@@ -399,7 +369,7 @@ void scooter_management::on_pushButton_4_clicked()
     rentS.setGuest(guestAcc);
     rentS.setScooterMgmt(current);
     rentS.setCurrentUser(currentUser);
-
+    rentS.setFilePath(filePath);
 
     myscooters myS;
     myS.setGuest(guestAcc);
@@ -407,6 +377,54 @@ void scooter_management::on_pushButton_4_clicked()
     myS.setRScooter(&rentS);
     myS.setCurrentUser(currentUser);
     myS.updateDisplay();
+    myS.setFilePath(filePath);
     myS.setModal(true);
     myS.exec();
+}
+
+
+void scooter_management::setFilePath(QString otherPath)
+{
+    filePath = otherPath;
+
+    QPixmap picture(filePath + "/scooter.png");
+
+    ui->label->setPixmap(picture);
+
+
+    // Initialize the SQLite database connection
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(filePath + "/database_q.db");
+
+    // Check if the database opens successfully
+    if (!db.open()) {
+        qDebug() << "Error: Could not open database."; // Output error message if the database fails to open
+        return;
+    }
+
+
+    // Create a SQL query to create the scooterIndex table if it doesn't exist
+    QSqlQuery query;
+    query.prepare("CREATE TABLE IF NOT EXISTS scooterIndex ("
+                  "scooter_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                  "available TEXT, "
+                  "nearest_lot TEXT, "
+                  "lot_distance INTEGER, " // Distance to nearest lot in miles
+                  "rental_rate INTEGER, " // In dollars (per hour)
+                  "renter TEXT, "
+                  "status TEXT)");
+    query.exec();
+
+    if(false)
+    {
+        // Add scooters if scooterIndex table is empty
+        for(int i = 0; i < 10; i++)
+        {
+            addScooter("Yes", "LOT A", 0, 4, "", "Available");
+            addScooter("Yes", "LOT B", 0, 4, "", "Available");
+            addScooter("Yes", "LOT C", 0, 4, "", "Available");
+            addScooter("Yes", "LOT D", 0, 4, "", "Available");
+            addScooter("Yes", "LOT E", 0, 4, "", "Available");
+        }
+    }
 }

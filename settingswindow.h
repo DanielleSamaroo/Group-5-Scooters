@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QtSql>
 #include <QFileInfo>
-#include "account_management.h"
+#include "accountmanagement.h"
 #include "mainwindow.h"
 #include "scooter_management.h"
 
@@ -37,10 +37,13 @@ public:
     void setCurrentUser(QString& userN);
 
     // Method to set account_management pointer
-    void setAccMgmt(account_management* a);
+    void setAccMgmt(accountmanagement* a);
 
     // Method to set scooter_management pointer
     void setScooterMgmt(scooter_management* s);
+
+    QString filePath;
+    void setFilePath(QString otherPath);
 
 private slots:
 
@@ -62,7 +65,7 @@ private:
     QSqlDatabase db; // Database connection object
 
     MainWindow* mainWindow;
-    account_management* accMgmt;
+    accountmanagement* accMgmt;
     scooter_management* scootMgmt;
 
     QList<QVariantMap> scooters; // Create a list to hold the scooter records

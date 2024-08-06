@@ -44,6 +44,9 @@ public:
     // Update scooterDetails and scooterIndex tables after an user rents a scooter
     void rentUnit(int numRows);
 
+    QString filePath;
+    void setFilePath(QString otherPath);
+
 private slots:
 
     void on_toolButton_clicked();

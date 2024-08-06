@@ -55,6 +55,9 @@ public:
     // Method to get number of rentals for current user
     int getNumRented(QString& userN);
 
+    QString filePath;
+    void setFilePath(QString otherPath);
+
 private slots:
     void on_toolButton_clicked();
 

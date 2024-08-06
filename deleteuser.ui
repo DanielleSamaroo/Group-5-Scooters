@@ -32,9 +32,9 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>50</y>
+      <y>40</y>
       <width>441</width>
-      <height>31</height>
+      <height>50</height>
      </rect>
     </property>
     <property name="font">
@@ -173,6 +173,33 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="palette">
+    <palette>
+     <active>
+      <colorrole role="Text">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </active>
+     <inactive>
+      <colorrole role="Text">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </inactive>
+     <disabled/>
+    </palette>
+   </property>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
@@ -193,7 +220,7 @@
      <x>0</x>
      <y>360</y>
      <width>761</width>
-     <height>20</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="text">
@@ -221,7 +248,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Delete an account</string>
+    <string>Delete an Account:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

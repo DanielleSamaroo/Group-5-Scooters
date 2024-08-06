@@ -2,6 +2,7 @@
 #define SCOOTERREQUESTS_H
 
 #include <QDialog>
+#include "mainwindow.h"
 
 namespace Ui {
 class scooterRequests;
@@ -14,6 +15,12 @@ class scooterRequests : public QDialog
 public:
     explicit scooterRequests(QWidget *parent = nullptr);
     ~scooterRequests();
+
+    QString filePath;
+    void setFilePath(QString otherPath);
+
+    // 'employee' or 'administrator'
+    QString accRank;
 
 private slots:
     void on_pushButton_clicked();
@@ -30,7 +37,7 @@ private slots:
 
     void on_toolButton_clicked();
 
-    void on_comboBox_3_currentIndexChanged(int index);
+    void on_comboBox_13_activated(int index);
 
 private:
     Ui::scooterRequests *ui;

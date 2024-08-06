@@ -16,7 +16,7 @@
   <widget class="QLabel" name="label_31">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>170</x>
      <y>270</y>
      <width>551</width>
      <height>20</height>
@@ -48,9 +48,9 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>50</y>
+      <y>40</y>
       <width>441</width>
-      <height>31</height>
+      <height>50</height>
      </rect>
     </property>
     <property name="font">
@@ -139,7 +139,7 @@
   <widget class="QLabel" name="label_30">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>170</x>
      <y>220</y>
      <width>551</width>
      <height>20</height>
@@ -156,9 +156,9 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>510</y>
+     <y>500</y>
      <width>761</width>
-     <height>20</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="font">
@@ -170,7 +170,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Scooter rented, go to My Scooters to see your details</string>
+    <string>Scooter Rented, go to My Scooters to view Details</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -192,7 +192,7 @@
   <widget class="QWidget" name="verticalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>110</x>
      <y>200</y>
      <width>31</width>
      <height>241</height>
@@ -299,7 +299,7 @@
   <widget class="QLabel" name="label_34">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>170</x>
      <y>400</y>
      <width>551</width>
      <height>20</height>
@@ -330,7 +330,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Select a scooter to return:</string>
+    <string>Select a Scooter to Return:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -352,7 +352,7 @@
   <widget class="QLabel" name="label_32">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>170</x>
      <y>320</y>
      <width>551</width>
      <height>20</height>
@@ -368,7 +368,7 @@
   <widget class="QLabel" name="label_33">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>170</x>
      <y>360</y>
      <width>551</width>
      <height>20</height>
@@ -384,7 +384,7 @@
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>140</x>
      <y>200</y>
      <width>21</width>
      <height>251</height>
