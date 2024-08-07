@@ -143,10 +143,10 @@ void MainWindow::labelPosition()
     ui->label_2->move(centerX-180,centerY-48.5);
     ui->label_3->move(centerX-293,centerY-150);
     ui->label_4->move(centerX -125, centerY - 50);
-    ui->label_5->move(centerX-180, centerY +20);
+    ui->label_5->move(0, centerY +20);
     ui->label_6->move(centerX-190,centerY - 98.5);
     ui->label_7->move(centerX-190,centerY - 48.5);
-    ui->label_8->move(centerX-150, centerY + 2.5);
+    ui->label_8->move(0, centerY + 2.5);
 }
 
 // Set the Line Text Position
@@ -302,16 +302,19 @@ void MainWindow::on_pushButton_3_clicked()
     {
         ui->label_8->setText("Missing fields");
         ui->label_8->show();
+        ui->label_5->hide();
     }
     else if(createUsername.size() > 20)
     {
         ui->label_8->setText("Username must not exceed 20 characters");
         ui->label_8->show();
+        ui->label_5->hide();
     }
     else if(createPassword.size() < 6 || createPassword.size() > 20)
     {
         ui->label_8->setText("Password length must be between 6 and 20 characters");
         ui->label_8->show();
+        ui->label_5->hide();
     }
     else
     {
@@ -357,6 +360,7 @@ void MainWindow::on_pushButton_3_clicked()
         {
             ui->label_8->setText("This username already exists");
             ui->label_8->show();
+            ui->label_5->hide();
         }
 
         query.finish();
@@ -460,6 +464,7 @@ void MainWindow::on_pushButton_4_clicked()
                 // Show message for invalid credentials
                 ui->label_8->setText("Invalid username or password");
                 ui->label_8->show();
+                ui->label_5->hide();
             }
         }
         query.finish();
@@ -469,6 +474,7 @@ void MainWindow::on_pushButton_4_clicked()
         //If username/password fields are empty
         ui->label_8->setText("Missing fields");
         ui->label_8->show();
+        ui->label_5->hide();
     }
 }
 

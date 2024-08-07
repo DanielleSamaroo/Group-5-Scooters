@@ -15,6 +15,7 @@ myscooters::myscooters(QWidget *parent)
 
     // Hide index Menu
     ui->comboBox_2->hide();
+    ui->comboBox_2->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     // Hide button box
     ui->buttonBox_2->hide();

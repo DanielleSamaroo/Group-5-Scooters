@@ -16,6 +16,7 @@ rentScooter::rentScooter(QWidget *parent)
 
     // Hide index Menu
     ui->comboBox->hide();
+    ui->comboBox->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     // Hide button box
     ui->buttonBox->hide();

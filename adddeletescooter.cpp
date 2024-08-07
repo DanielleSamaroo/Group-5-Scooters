@@ -57,6 +57,7 @@ addDeleteScooter::addDeleteScooter(QWidget *parent)
                                     "}" "QPushButton:hover {" "background-color: orange;""}");
 
     ui->comboBox_15->hide();
+    ui->comboBox_15->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     ui->label_17->hide();
     ui->label_18->hide();

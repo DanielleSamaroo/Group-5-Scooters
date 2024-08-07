@@ -14,8 +14,8 @@ changeData::changeData(QWidget *parent)
 
     // Set style of window and buttons
     ui->comboBox->hide();
+    ui->comboBox->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
-    ui->comboBox->hide();
     ui->buttonBox->hide();
 
 

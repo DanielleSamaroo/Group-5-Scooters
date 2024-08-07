@@ -15,6 +15,7 @@ employee_manager::employee_manager(QWidget *parent)
 
     // Set style button and window
     ui->comboBox->hide();
+    ui->comboBox->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     this->setStyleSheet("background-color: rgb(1, 68, 3);");
 

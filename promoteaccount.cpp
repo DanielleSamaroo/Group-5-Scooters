@@ -17,6 +17,7 @@ promoteaccount::promoteaccount(QWidget *parent)
     QPixmap image(filePath + "/scooter.png");
     ui->label_5->setPixmap(image);
     ui->comboBox->hide();
+    ui->comboBox->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     ui->toolButton_2->setStyleSheet("QToolButton {" "color: white;" "background-color: grey;"  "padding: 3px;"
                                   "}" "QToolButton:hover {" "background-color: orange;""}");

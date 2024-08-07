@@ -40,11 +40,14 @@ scooter_management::scooter_management(QWidget *parent)
     ui->frame->setStyleSheet("QFrame {" "background-color: black;}");
 
     ui->comboBox->setCurrentIndex(0);
-    //ui->comboBox->setStyleSheet("QComboBox { color: white; }");
+
+    ui->comboBox->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     ui->label_3->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
     ui->label_5->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
     ui->label_6->setStyleSheet("QLabel { color : rgb(255, 255, 255); }");
+
+
 
 }
 
@@ -138,10 +141,10 @@ bool scooter_management::requestRental(int scooterID, const QString& renter)
 // Method to approve a rental request
 bool scooter_management::approveRental(int scooterID, const QString& renter) {
     QSqlQuery query;
-    query.prepare("UPDATE scooterIndex SET available = 'No', renter = :renter, status = 'Rented' WHERE scooter_id = :scooter_id, status = :pending");
+    query.prepare("UPDATE scooterIndex SET available = 'No', renter = :renter, status = 'Rented' WHERE scooter_id = :scooter_id");
     query.bindValue(":renter", renter);
     query.bindValue(":scooter_id", scooterID);
-    query.bindValue(":pending", "Pending");
+    //query.bindValue(":pending", "Pending");
 
     return query.exec();
 }
@@ -149,9 +152,9 @@ bool scooter_management::approveRental(int scooterID, const QString& renter) {
 // Method to reject a rental request
 bool scooter_management::rejectRental(int scooterID) {
     QSqlQuery query;
-    query.prepare("UPDATE scooterIndex SET available = 'Yes', renter = NULL, status = 'Available' WHERE scooter_id = :scooter_id, status = :pending");
+    query.prepare("UPDATE scooterIndex SET available = 'Yes', renter = '', status = 'Available' WHERE scooter_id = :scooter_id");
     query.bindValue(":scooter_id", scooterID);
-    query.bindValue(":pending", "Pending");
+    //query.bindValue(":pending", "Pending");
 
     return query.exec();
 }
@@ -418,7 +421,7 @@ void scooter_management::setFilePath(QString otherPath)
     if(false)
     {
         // Add scooters if scooterIndex table is empty
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 20; i++)
         {
             addScooter("Yes", "LOT A", 0, 4, "", "Available");
             addScooter("Yes", "LOT B", 0, 4, "", "Available");

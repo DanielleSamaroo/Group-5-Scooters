@@ -14,8 +14,7 @@ deleteUser::deleteUser(QWidget *parent)
 
     // Set window style and buttons
     ui->comboBox->hide();
-
-    ui->comboBox->hide();
+    ui->comboBox->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     this->setStyleSheet("background-color: rgb(1, 68, 3);");
 

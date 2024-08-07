@@ -14,6 +14,7 @@ accountmanagement::accountmanagement(QWidget *parent)
     ui->setupUi(this);
 
     ui->comboBox_3->hide();
+    ui->comboBox_3->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     // Set style of buttons and window
 

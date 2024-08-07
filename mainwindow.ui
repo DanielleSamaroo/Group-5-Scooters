@@ -324,14 +324,17 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>-10</x>
+      <x>0</x>
       <y>150</y>
-      <width>421</width>
-      <height>16</height>
+      <width>400</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Invalid Username or Password</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -364,12 +367,15 @@
      <rect>
       <x>380</x>
       <y>300</y>
-      <width>241</width>
+      <width>400</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_6">

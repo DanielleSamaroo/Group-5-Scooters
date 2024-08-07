@@ -33,6 +33,7 @@ scooterRequests::scooterRequests(QWidget *parent)
     ui->label->setPixmap(image);
 
     ui->comboBox_13->hide();
+    ui->comboBox_13->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     this->setStyleSheet("background-color: rgb(1, 68, 3);");
 

@@ -21,6 +21,7 @@ settingsWindow::settingsWindow(QWidget *parent)
 
     // Hide index Menu
     ui->comboBox_2->hide();
+    ui->comboBox_2->setStyleSheet("QComboBox QAbstractItemView { color: rgb(255, 255, 255); }");
 
     QPixmap pix(filePath + "/scooter.png");
     ui->label_8->setPixmap(pix);
